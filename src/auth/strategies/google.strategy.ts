@@ -9,7 +9,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     super({
       clientID: configService.get('GOOGLE_CLIENT_ID'),
       clientSecret: configService.get('GOOGLE_CLIENT_SECRET'),
-      callbackURL: 'http://localhost:4000/google/callback',
+      callbackURL: 'http://localhost:3000/auth/google/callback',
       scope: ['email', 'profile'],
     });
   }
@@ -21,6 +21,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     };
   }
 
+  // validate 매서드는 리다이렉션된 후에 작동
   async validate(
     accessToken: string,
     refreshToken: string,
@@ -35,7 +36,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         lastName: name.givenName,
         photo: photos[0].value,
       };
-      done(null, user);
+      done(null, user, accessToken);
     } catch (error) {
       done(error);
     }

@@ -27,7 +27,7 @@ export class AuthController {
   googleLoginCallback(@Req() req) {
     // 구글 로그인 성공 후 실행되는 코드
     return {
-      message: 'Google 로그인 성공',
+      message: 'Google 로그인 성공하여 정보를 반환합니다.',
       user: req.user,
     };
   }
