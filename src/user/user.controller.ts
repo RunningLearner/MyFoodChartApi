@@ -8,8 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UserDto } from './dto/user.dto';
 import { FindOneOptions } from 'typeorm';
 import { User } from './entities/user.entity';
 
@@ -18,7 +17,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  create(@Body() createUserDto: UserDto) {
     return this.userService.create(createUserDto);
   }
 
@@ -36,11 +35,8 @@ export class UserController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
-    const options: FindOneOptions<User> = {
-      where: { id },
-    };
-    return this.userService.update(options, updateUserDto);
+  update(@Param('id') id: number, @Body() updateUserDto: UserDto) {
+    return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')

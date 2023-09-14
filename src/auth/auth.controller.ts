@@ -5,9 +5,7 @@ import { Response } from 'express';
 /* Google Strategy */
 type GoogleUser = {
   email: string;
-  firstName: string;
-  lastName: string;
-  photo: string;
+  nickname: string;
 };
 export type GoogleRequest = Request & { user: GoogleUser };
 

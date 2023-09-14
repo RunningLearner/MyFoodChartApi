@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UserDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
 import { FindOneOptions, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,7 +11,7 @@ export class UserService {
     private usersRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
+  create(createUserDto: UserDto) {
     return this.usersRepository.create(createUserDto);
   }
 
@@ -24,8 +23,11 @@ export class UserService {
     return this.usersRepository.findOne(id);
   }
 
-  update(id: FindOneOptions<User>, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  update(id: number, updateUserDto: UserDto) {
+    return this.usersRepository.update(
+      { id: id }, // 조건
+      { nickname: updateUserDto.nickname }, // 업데이트 할 내용
+    );
   }
 
   remove(id: number) {
