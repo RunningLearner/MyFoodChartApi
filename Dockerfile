@@ -1,5 +1,5 @@
 # 베이스 이미지 설정. Node.js 버전을 명시합니다.
-FROM node:14
+FROM node:lts
 
 # 작업 디렉토리 설정
 WORKDIR /usr/src/app
