@@ -19,13 +19,13 @@ export class UserService {
     return `This action returns all user`;
   }
 
-  findOne(id: FindOneOptions<User>) {
-    return this.usersRepository.findOne(id);
+  findOne(email: FindOneOptions<User>) {
+    return this.usersRepository.findOne(email);
   }
 
-  update(id: number, updateUserDto: UserDto) {
+  update(email: string, updateUserDto: UserDto) {
     return this.usersRepository.update(
-      { id: id }, // 조건
+      { email: email }, // 조건
       { nickname: updateUserDto.nickname }, // 업데이트 할 내용
     );
   }

@@ -26,17 +26,17 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: number) {
+  @Get(':email')
+  findOne(@Param('email') email: string) {
     const options: FindOneOptions<User> = {
-      where: { id },
+      where: { email },
     };
     return this.userService.findOne(options);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: number, @Body() updateUserDto: UserDto) {
-    return this.userService.update(id, updateUserDto);
+  @Patch(':email')
+  update(@Param('email') email: string, @Body() updateUserDto: UserDto) {
+    return this.userService.update(email, updateUserDto);
   }
 
   @Delete(':id')
