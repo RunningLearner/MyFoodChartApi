@@ -9,5 +9,5 @@ export class User {
   email: string;
 
   @Column('text')
-  nickname: string;
+  name: string;
 }

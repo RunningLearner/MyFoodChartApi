@@ -11,26 +11,26 @@ export class UserService {
     private usersRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: UserDto) {
+  async create(createUserDto: UserDto) {
     return this.usersRepository.create(createUserDto);
   }
 
-  findAll() {
+  async findAll() {
     return `This action returns all user`;
   }
 
-  findOne(email: FindOneOptions<User>) {
+  async findOne(email: FindOneOptions<User>) {
     return this.usersRepository.findOne(email);
   }
 
-  update(email: string, updateUserDto: UserDto) {
+  async update(email: string, updateUserDto: UserDto) {
     return this.usersRepository.update(
       { email: email }, // 조건
-      { nickname: updateUserDto.nickname }, // 업데이트 할 내용
+      { name: updateUserDto.name }, // 업데이트 할 내용
     );
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     return `This action removes a #${id} user`;
   }
 }

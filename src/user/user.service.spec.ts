@@ -36,7 +36,7 @@ describe('UserService', () => {
   describe('create', () => {
     it('유저 생성', async () => {
       const userDto: UserDto = {
-        nickname: 'test-nickname',
+        name: 'test-nickname',
         email: 'test@email.com',
       };
 
@@ -54,7 +54,7 @@ describe('UserService', () => {
 
       user.id = 1;
       user.email = 'test@email.com';
-      user.nickname = 'test-nickname';
+      user.name = 'test-nickname';
 
       mockRepository.findOne.mockReturnValue(Promise.resolve(user));
 
@@ -74,7 +74,7 @@ describe('UserService', () => {
   describe('update', () => {
     it('업데이트가 올바른 인자를 가지는가', async () => {
       const userDto: UserDto = {
-        nickname: 'updated-nickname',
+        name: 'updated-nickname',
         email: 'test@email.com',
       };
       mockRepository.update.mockReturnValue(Promise.resolve());
@@ -85,7 +85,7 @@ describe('UserService', () => {
       // Validate
       expect(mockRepository.update).toHaveBeenCalledWith(
         { email: 'test@email.com' },
-        { nickname: 'updated-nickname' },
+        { name: 'updated-nickname' },
       );
     });
   });
