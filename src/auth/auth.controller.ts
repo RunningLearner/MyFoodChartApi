@@ -1,28 +1,11 @@
 import { Controller, Get, UseGuards, Req, Res } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
-import { Response } from 'express';
 import { NaverAuthGuard } from './gurads/naver-auth.guard';
 import { KakaoAuthGuard } from './gurads/kakao-auth.guard';
-
-interface IOAuthUser {
-  //interface 설정
-  user: {
-    name: string;
-    email: string;
-  };
-}
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
-  @Get('google')
-  @UseGuards(AuthGuard('google'))
-  async googleLogin(@Req() req: Request & IOAuthUser, @Res() res: Response) {
-    // 프로필을 받아온 다음, 로그인 처리해야하는 곳(auth.service.ts에서 선언해준다)
-    this.authService.OAuthLogin(req, res);
-  }
 
   @Get('login/naver')
   @UseGuards(NaverAuthGuard) // 여기에서 'naver'는 NaverStrategy의 이름과 일치해야 합니다.

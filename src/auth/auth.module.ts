@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { GoogleStrategy } from './strategies/google.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { UserModule } from 'src/user/user.module';
@@ -22,7 +21,7 @@ import { KakaoStrategy } from './strategies/kakao.strategy';
     PassportModule.register({ defaultStrategy: 'google' }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, GoogleStrategy, NaverStrategy, KakaoStrategy],
+  providers: [AuthService, NaverStrategy, KakaoStrategy],
   exports: [AuthService, JwtModule],
 })
 export class AuthModule {}
