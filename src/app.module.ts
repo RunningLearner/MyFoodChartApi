@@ -9,18 +9,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `.env.${process.env.NODE_ENV}`,
+      envFilePath: `.env`,
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       host: process.env.DB_HOST,
-      port: 3306,
+      port: 5432,
       username: 'root',
       password: '1234',
       database: 'mfc',
       autoLoadEntities: true,
       synchronize: true,
+      entities: ['dist/**/*.entity{.ts,.js}'],
     }),
     AuthModule,
     UserModule,

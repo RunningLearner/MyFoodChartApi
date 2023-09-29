@@ -1,41 +1,32 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { Profile, Strategy } from 'passport-naver-v2';
+import { Strategy } from 'passport-naver';
 
 @Injectable()
-export class NaverStrategy extends PassportStrategy(Strategy, 'naver') {
-  constructor(private readonly configService: ConfigService) {
+export class NaverStrategy extends PassportStrategy(Strategy) {
+  constructor() {
     super({
-      clientID: configService.get('NAVER_CLIENT_ID'),
-      clientSecret: configService.get('NAVER_CLIENT_PW'),
-      callbackURL: configService.get('NAVER_CALLBACK_URL'),
+      clientID: process.env.NAVER_CLIENT_ID,
+      clientSecret: process.env.NAVER_CLIENT_PW,
+      callbackURL: process.env.NAVER_CALLBACK_URL,
     });
   }
 
-  authorizationParams(): { [key: string]: string } {
-    return {
-      access_type: 'offline',
-      prompt: 'consent',
-    };
-  }
-
   // validate 매서드는 리다이렉션된 후에 작동
-  async validate(
-    accessToken: string,
-    refreshToken: string,
-    profile: Profile,
-    done: any,
-  ) {
-    try {
-      const { name, email } = profile;
-      const user = {
-        email: email,
-        lastName: name,
-      };
-      done(null, user);
-    } catch (error) {
-      done(error);
+  async validate(accessToken: string, refreshToken: string, profile, done) {
+    console.log(profile);
+    console.log(accessToken);
+    let email;
+    if (profile.emails && profile.emails.length > 0) {
+      email = profile.emails[0].value;
     }
+
+    // 사용자 정보는 profile 변수에 들어있습니다.
+    // 필요한 로직을 여기에 구현하고, 사용자 정보를 반환하거나 에러를 던집니다.
+    const user = {
+      username: profile.displayName,
+      email: email,
+    };
+    return done(null, user);
   }
 }

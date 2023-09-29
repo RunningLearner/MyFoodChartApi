@@ -5,9 +5,9 @@ export class User {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column('text')
+  @Column({ type: 'text', unique: true })
   email: string;
 
-  @Column('text')
+  @Column({ type: 'text', nullable: true })
   name: string;
 }

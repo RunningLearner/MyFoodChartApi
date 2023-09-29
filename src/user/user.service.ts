@@ -12,11 +12,13 @@ export class UserService {
   ) {}
 
   async create(createUserDto: UserDto) {
-    return this.usersRepository.create(createUserDto);
+    console.log(createUserDto);
+    const newUser = this.usersRepository.create(createUserDto);
+    return await this.usersRepository.save(newUser);
   }
 
   async findAll() {
-    return `This action returns all user`;
+    return `This action returns all user.`;
   }
 
   async findOne(email: FindOneOptions<User>) {
