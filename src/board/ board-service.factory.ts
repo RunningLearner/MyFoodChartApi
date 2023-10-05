@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { BoardService } from './board.service';
+import { BoardDietService } from './board-diet.service';
 
 @Injectable()
 export class BoardServiceFactory {
-  constructor(private readonly boardService: BoardService) {}
+  constructor(private readonly boardDietService: BoardDietService) {}
 
   getService(type: string) {
     // if (type === 'A') {

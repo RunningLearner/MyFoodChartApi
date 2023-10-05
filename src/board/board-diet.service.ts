@@ -3,7 +3,7 @@ import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 
 @Injectable()
-export class BoardService {
+export class BoardDietService {
   create(createBoardDto: CreateBoardDto) {
     return 'This action adds a new board';
   }
