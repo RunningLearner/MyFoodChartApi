@@ -3,15 +3,23 @@ import { BoardDietService } from './board-diet.service';
 
 @Injectable()
 export class BoardServiceFactory {
-  constructor(private readonly boardDietService: BoardDietService) {}
+  constructor(
+    // private readonly boardAService: BoardAService,
+    // private readonly boardBService: BoardBService,
+    private readonly boardDietService: BoardDietService,
+  ) {}
 
   getService(type: string) {
-    // if (type === 'A') {
+    if (type === 'diet') {
+      return this.boardDietService;
+    }
+    // else if (type === 'A') {
     //   return this.boardAService;
     // } else if (type === 'B') {
     //   return this.boardBService;
-    // } else {
-    //   throw new NotFoundException('Invalid board type');
     // }
+    else {
+      throw new NotFoundException('Invalid board type');
+    }
   }
 }

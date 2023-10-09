@@ -33,7 +33,4 @@ export class CreateBoardDto {
 
   @IsString()
   fileURL: string;
-
-  @IsString()
-  boardType: string;
 }

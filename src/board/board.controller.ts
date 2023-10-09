@@ -7,36 +7,45 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { BoardDietService } from './board-diet.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
+import { BoardServiceFactory } from './ board-service.factory';
 
-@Controller('board')
+@Controller('boards/:type')
 export class BoardController {
-  constructor(private readonly boardDietervice: BoardDietService) {}
+  constructor(private readonly boardServiceFactory: BoardServiceFactory) {}
 
   @Post()
-  create(@Body() createBoardDto: CreateBoardDto) {
-    return this.boardDietervice.create(createBoardDto);
+  create(@Param('type') type: string, @Body() createDto: CreateBoardDto) {
+    const boardService = this.boardServiceFactory.getService(type);
+    return boardService.create(createDto);
   }
 
   @Get()
-  findAll() {
-    return this.boardDietervice.findAll();
+  findAll(@Param('type') type: string) {
+    const boardService = this.boardServiceFactory.getService(type);
+    return boardService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.boardDietervice.findOne(+id);
+  findOne(@Param('type') type: string, @Param('id') id: string) {
+    const boardService = this.boardServiceFactory.getService(type);
+    return boardService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBoardDto: UpdateBoardDto) {
-    return this.boardDietervice.update(+id, updateBoardDto);
+  update(
+    @Param('type') type: string,
+    @Param('id') id: string,
+    @Body() updateBoardDto: UpdateBoardDto,
+  ) {
+    const boardService = this.boardServiceFactory.getService(type);
+    return boardService.update(+id, updateBoardDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.boardDietervice.remove(+id);
+  remove(@Param('type') type: string, @Param('id') id: string) {
+    const boardService = this.boardServiceFactory.getService(type);
+    return boardService.remove(+id);
   }
 }

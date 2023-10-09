@@ -94,10 +94,4 @@ export class Board {
    */
   @Column('text')
   fileURL: string;
-
-  /**
-   * 게시판 타입을 나타냅니다.
-   */
-  @Column('text')
-  boardType: string;
 }
