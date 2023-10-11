@@ -1,9 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Board } from 'src/board/entities/board.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('increment')
   id: number;
+
+  @OneToMany(() => Board, (board) => board.user)
+  boards: Board[];
 
   @Column({ type: 'text', unique: true })
   email: string;

@@ -1,9 +1,12 @@
+import { User } from 'src/user/entities/user.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 /**
@@ -22,6 +25,9 @@ export class Board {
    */
   @Column({ type: 'text', unique: true })
   nickname: string;
+  @ManyToOne(() => User, (user) => user.boards) // boards는 User 엔터티에서 Board 엔터티를 참조하는 필드입니다.
+  @JoinColumn({ name: 'userId' }) // DB에 저장될 컬럼 이름을 userId로 설정
+  user: User;
 
   /**
    * 생성 날짜입니다.
@@ -94,4 +100,7 @@ export class Board {
    */
   @Column('text')
   fileURL: string;
+
+  @Column('bool')
+  isDeleted: boolean;
 }
