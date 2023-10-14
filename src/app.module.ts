@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BoardModule } from './board/board.module';
+import { LoggerModule } from './common/module/logger.module';
 
 @Module({
   imports: [
@@ -24,11 +25,13 @@ import { BoardModule } from './board/board.module';
       synchronize: true,
       entities: ['dist/**/*.entity{.ts,.js}'],
     }),
+    LoggerModule,
     AuthModule,
     UserModule,
     BoardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
+  exports: [],
 })
 export class AppModule {}
