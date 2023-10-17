@@ -1,4 +1,4 @@
-import { User } from 'src/user/entities/user.entity';
+import { User } from '../../user/entities/user.entity';
 import {
   Entity,
   Column,
@@ -50,13 +50,13 @@ export class Board {
   /**
    * 식수를 나타냅니다.
    */
-  @Column('number')
+  @Column('integer')
   peopleNum: number;
 
   /**
    * 가격을 나타냅니다.
    */
-  @Column('number')
+  @Column('integer')
   price: number;
 
   /**
