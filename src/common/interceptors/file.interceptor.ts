@@ -47,7 +47,7 @@ export class FileInterceptor implements NestInterceptor {
 
     upload(request, null, (err) => {
       if (err) {
-        // 에러 처리 로직
+        throw err;
       } else {
         if (request.files.imgfile) {
           request.body.imgfileUrl = path.join(

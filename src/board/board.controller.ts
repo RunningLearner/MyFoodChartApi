@@ -26,17 +26,9 @@ export class BoardController {
   @UseGuards(JwtGuard)
   @Post('/:type')
   create(@Param('type') type: string, @Body() createDto: CreateBoardDto) {
-    try {
-      this.logger.info('게시글 생성 컨르롤러 호출됨.');
-      console.log(type);
-      const boardService = this.boardServiceFactory.getService(type);
-      this.logger.info(`생성된 서비스 : ${boardService}`);
-      return boardService.create(createDto);
-    } catch (e) {
-      this.logger.warn(
-        `게시글 생성 컨트롤러 예외 발생. Error: ${e.message} Stack Trace: ${e.stack}`,
-      );
-    }
+    this.logger.info('게시글 생성 컨르롤러 호출됨.');
+    const boardService = this.boardServiceFactory.getService(type);
+    return boardService.create(createDto);
   }
 
   @Get()

@@ -16,17 +16,11 @@ export class BoardDietService {
   ) {}
 
   async create(createBoardDto: CreateBoardDto) {
-    try {
-      this.logger.info(`diet post create service called`);
+    this.logger.info(`diet post create service called`);
 
-      const newPost = this.boardsRepository.create(createBoardDto);
+    const newPost = this.boardsRepository.create(createBoardDto);
 
-      return await this.boardsRepository.save(newPost);
-    } catch (e) {
-      this.logger.warn(
-        `Diet 게시글 생성 실패 CreateBoardDto: ${createBoardDto} Error: ${e.message} Stack Trace: ${e.stack}`,
-      );
-    }
+    return await this.boardsRepository.save(newPost);
   }
 
   async findAll() {
