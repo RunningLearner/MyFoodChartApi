@@ -1,26 +1,41 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateBoardDto } from './dto/create-board.dto';
+import { CreatePostDto } from './dto/create-post.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Board } from './entities/board.entity';
 import { Repository } from 'typeorm';
 import { Logger as WinstonLogger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Post } from './entities/post.entity';
+import { Menu } from './entities/menu.entity';
 
 @Injectable()
 export class BoardDietService {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: WinstonLogger,
-    @InjectRepository(Board)
-    private boardsRepository: Repository<Board>,
+    @InjectRepository(Post)
+    private postsRepository: Repository<Post>,
+    @InjectRepository(Menu)
+    private menuRepository: Repository<Menu>,
   ) {}
 
-  async create(createBoardDto: CreateBoardDto) {
+  async create(createPostDto: CreatePostDto) {
     this.logger.info(`diet post create service called`);
 
-    const newPost = this.boardsRepository.create(createBoardDto);
+    const { menues, ...postData } = createPostDto;
 
-    return await this.boardsRepository.save(newPost);
+    const newPost = this.postsRepository.create(postData);
+
+    const savedPost = await this.postsRepository.save(newPost);
+
+    if (menues && menues.length > 0) {
+      const newMenues = this.menuRepository.create(
+        menues.map((menu) => ({ ...menu, post: savedPost })),
+      );
+
+      await this.menuRepository.save(newMenues);
+    }
+
+    return savedPost;
   }
 
   async findAll() {
