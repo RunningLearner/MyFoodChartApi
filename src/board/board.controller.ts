@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Inject,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { BoardServiceFactory } from './ board-service.factory';
@@ -15,6 +16,7 @@ import { JwtGuard } from '../common/gurads/jwt.guard';
 import { Logger as WinstonLogger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { CreatePostDto } from './dto/create-post.dto';
+import { FileInterceptor } from 'src/common/interceptors/file.interceptor';
 
 @Controller('boards')
 export class BoardController {
@@ -24,9 +26,10 @@ export class BoardController {
   ) {}
 
   @UseGuards(JwtGuard)
+  @UseInterceptors(FileInterceptor)
   @Post('/:type')
   create(@Param('type') type: string, @Body() createDto: CreatePostDto) {
-    this.logger.info('게시글 생성 컨르롤러 호출됨.');
+    this.logger.info('게시글 생성 컨르롤러 호출됨.', createDto);
     const boardService = this.boardServiceFactory.getService(type);
     return boardService.create(createDto);
   }

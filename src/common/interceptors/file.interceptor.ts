@@ -18,13 +18,12 @@ export class FileInterceptor implements NestInterceptor {
     const storage = multer.diskStorage({
       destination: (req, file, cb) => {
         let folder = 'uploads/';
-        if (file.fieldname === 'imgfile') {
+        if (file.fieldname === 'recipeImg') {
           folder += 'images/';
-        } else if (file.fieldname === 'dietfile') {
-          folder += 'diets/';
+        } else if (file.fieldname === 'recipeFile') {
+          folder += 'files/';
         }
 
-        // 디렉터리가 없으면 만듭니다.
         if (!fs.existsSync(folder)) {
           fs.mkdirSync(folder, { recursive: true });
         }
@@ -41,28 +40,29 @@ export class FileInterceptor implements NestInterceptor {
     });
 
     const upload = multer({ storage }).fields([
-      { name: 'imgfile', maxCount: 1 },
-      { name: 'dietfile', maxCount: 1 },
+      { name: 'recipeImg', maxCount: 1 },
+      { name: 'recipeFile', maxCount: 1 },
     ]);
 
     upload(request, null, (err) => {
       if (err) {
         throw err;
-      } else {
-        if (request.files.imgfile) {
-          request.body.imgfileUrl = path.join(
-            'uploads',
-            'images',
-            request.files.imgfile[0].filename,
-          );
-        }
-        if (request.files.dietfile) {
-          request.body.dietfileUrl = path.join(
-            'uploads',
-            'diets',
-            request.files.dietfile[0].filename,
-          );
-        }
+      }
+
+      if (request.files && request.files.recipeImg) {
+        request.body.recipeImg = path.join(
+          'uploads',
+          'images',
+          request.files.recipeImg[0].filename,
+        );
+      }
+
+      if (request.files && request.files.recipeFile) {
+        request.body.recipeFile = path.join(
+          'uploads',
+          'files',
+          request.files.recipeFile[0].filename,
+        );
       }
     });
 
