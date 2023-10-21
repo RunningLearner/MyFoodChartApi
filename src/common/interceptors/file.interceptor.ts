@@ -11,7 +11,10 @@ import * as path from 'path';
 
 @Injectable()
 export class FileInterceptor implements NestInterceptor {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  async intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Promise<Observable<any>> {
     const ctx = context.switchToHttp();
     const request = ctx.getRequest();
 
@@ -44,26 +47,29 @@ export class FileInterceptor implements NestInterceptor {
       { name: 'recipeFile', maxCount: 1 },
     ]);
 
-    upload(request, null, (err) => {
-      if (err) {
-        throw err;
-      }
+    await new Promise((resolve, reject) => {
+      upload(request, null, (err) => {
+        if (err) {
+          reject(err);
+        }
 
-      if (request.files && request.files.recipeImg) {
-        request.body.recipeImg = path.join(
-          'uploads',
-          'images',
-          request.files.recipeImg[0].filename,
-        );
-      }
+        if (request.files && request.files.recipeImg) {
+          request.body.recipeImg = path.join(
+            'uploads',
+            'images',
+            request.files.recipeImg[0].filename,
+          );
+        }
 
-      if (request.files && request.files.recipeFile) {
-        request.body.recipeFile = path.join(
-          'uploads',
-          'files',
-          request.files.recipeFile[0].filename,
-        );
-      }
+        if (request.files && request.files.recipeFile) {
+          request.body.recipeFile = path.join(
+            'uploads',
+            'files',
+            request.files.recipeFile[0].filename,
+          );
+        }
+        resolve(true);
+      });
     });
 
     return next.handle();

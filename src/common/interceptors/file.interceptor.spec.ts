@@ -38,8 +38,10 @@ describe('FileInterceptor', () => {
     } as unknown as CallHandler;
 
     // 2. 인터셉터 실행
-    await new Promise<void>((resolve) => {
-      interceptor.intercept(mockExecutionContext, mockCallHandler).subscribe({
+    await new Promise<void>(async (resolve) => {
+      (
+        await interceptor.intercept(mockExecutionContext, mockCallHandler)
+      ).subscribe({
         complete: () => resolve(),
       });
     });
