@@ -7,7 +7,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Menu } from './menu.entity';
-import { User } from 'src/user/entities/user.entity';
+import { User } from '../../user/entities/user.entity';
 
 @Entity()
 export class Post {

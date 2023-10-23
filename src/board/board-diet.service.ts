@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
-import { UpdateBoardDto } from './dto/update-board.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Logger as WinstonLogger } from 'winston';
@@ -19,11 +18,15 @@ export class BoardDietService {
   ) {}
 
   async create(createPostDto: CreatePostDto) {
-    this.logger.info(`diet post create service called`);
-
-    const { menues, ...postData } = createPostDto;
-
-    const newPost = this.postsRepository.create(postData);
+    this.logger.info(
+      `diet post create service called createpostdto: ${JSON.stringify(
+        createPostDto,
+      )}`,
+    );
+    const { ...postData } = createPostDto;
+    const { menues, ...data } = postData;
+    console.log('postdata::', data);
+    const newPost = this.postsRepository.create(data);
 
     const savedPost = await this.postsRepository.save(newPost);
 
@@ -46,9 +49,9 @@ export class BoardDietService {
     return `This action returns a #${id} board`;
   }
 
-  async update(id: number, updateBoardDto: UpdateBoardDto) {
-    return `This action updates a #${id} board`;
-  }
+  // async update(id: number, updateBoardDto: UpdateBoardDto) {
+  //   return `This action updates a #${id} board`;
+  // }
 
   async remove(id: number) {
     return `This action removes a #${id} board`;

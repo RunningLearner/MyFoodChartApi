@@ -18,7 +18,8 @@ export class JwtGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const authHeader = request.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-
+    console.log('jwtguard called!!');
+    console.log(request);
     if (!token) {
       this.logger.warn('No token provided.');
       return false; // 토큰이 없는 경우 false를 반환
@@ -32,7 +33,7 @@ export class JwtGuard implements CanActivate {
       }
 
       request.user.email = decoded;
-
+      this.logger.info(`로그인 성공 유저: ${JSON.stringify(decoded)}`);
       return true;
     } catch (e) {
       this.logger.warn(

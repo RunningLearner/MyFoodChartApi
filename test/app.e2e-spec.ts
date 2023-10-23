@@ -20,21 +20,39 @@ describe('AppController (e2e)', () => {
   });
 
   it('게시글 생성', () => {
-    // 여기에는 실제 파일의 경로를 넣어주세요.
-    const filePath = path.resolve(__dirname, './test-assets/testImage.jpeg');
-    // 테스트 유저 인증
-    const user = { id: 1, username: 'test' };
+    const filePath1 = path.resolve(__dirname, './test-assets/testImage.jpeg');
+    const filePath2 = path.resolve(__dirname, './test-assets/testFile.pdf');
+    const user = { email: 'test@test.com' };
     fakeToken = jwt.sign(user, process.env.JWT_SECRET);
-    console.log(fakeToken);
+
+    const postData = {
+      date: '2021-12-12',
+      institute: 'Test Institute',
+      peopleNum: '5',
+      price: '10000',
+      explanation: 'This is a test',
+      whichSchool: 'Test School',
+      menues: [
+        {
+          id: 0,
+          menuName: 'Test Menu',
+          isProductUsed: true,
+          productName: 'Test Product',
+          productBrand: 'Test Brand',
+        },
+      ],
+    };
 
     return request(app.getHttpServer())
       .post('/boards/diet')
       .set('authorization', `Bearer ${fakeToken}`)
-      .attach('file', fs.readFileSync(filePath), 'testImage.jpeg')
+      .field('postData', JSON.stringify(postData))
+      .attach('recipeImg', fs.readFileSync(filePath1), 'testImage.jpeg')
+      .attach('recipeFile', fs.readFileSync(filePath2), 'testFile.pdf')
       .expect(201)
       .then((response) => {
-        // 여기에 성공시 응답을 확인하는 로직을 넣을 수 있습니다.
         expect(response.body).toBeDefined();
+        // 여기에 추가적으로 응답 데이터에 대한 검증 로직을 넣을 수 있습니다.
       });
   });
 });
