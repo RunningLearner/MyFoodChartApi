@@ -25,28 +25,27 @@ describe('AppController (e2e)', () => {
     const user = { email: 'test@test.com' };
     fakeToken = jwt.sign(user, process.env.JWT_SECRET);
 
-    const postData = {
-      date: '2021-12-12',
-      institute: 'Test Institute',
-      peopleNum: '5',
-      price: '10000',
-      explanation: 'This is a test',
-      whichSchool: 'Test School',
-      menues: [
-        {
-          id: 0,
-          menuName: 'Test Menu',
-          isProductUsed: true,
-          productName: 'Test Product',
-          productBrand: 'Test Brand',
-        },
-      ],
-    };
+    const menues = [
+      {
+        id: 0,
+        menuName: 'Test Menu',
+        isProductUsed: true,
+        productName: 'Test Product',
+        productBrand: 'Test Brand',
+      },
+      // ... other menu items
+    ];
 
     return request(app.getHttpServer())
       .post('/boards/diet')
       .set('authorization', `Bearer ${fakeToken}`)
-      .field('postData', JSON.stringify(postData))
+      .field('date', '2021-12-12') // 별도의 필드로 추가
+      .field('institute', 'Test Institute')
+      .field('peopleNum', '5')
+      .field('price', '10000')
+      .field('explanation', 'This is a test')
+      .field('whichSchool', 'Test School')
+      .field('menues', JSON.stringify(menues))
       .attach('recipeImg', fs.readFileSync(filePath1), 'testImage.jpeg')
       .attach('recipeFile', fs.readFileSync(filePath2), 'testFile.pdf')
       .expect(201)

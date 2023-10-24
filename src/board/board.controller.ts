@@ -32,6 +32,7 @@ export class BoardController {
     this.logger.info(
       `게시글 생성 컨르롤러 호출됨. createDto: ${JSON.stringify(createDto)}`,
     );
+
     const boardService = this.boardServiceFactory.getService(type);
     return boardService.create(createDto);
   }

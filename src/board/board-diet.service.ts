@@ -6,6 +6,7 @@ import { Logger as WinstonLogger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Post } from './entities/post.entity';
 import { Menu } from './entities/menu.entity';
+import { CreateMenuDTO } from './dto/create-menu.dto';
 
 @Injectable()
 export class BoardDietService {
@@ -23,9 +24,11 @@ export class BoardDietService {
         createPostDto,
       )}`,
     );
-    const { ...postData } = createPostDto;
-    const { menues, ...data } = postData;
-    console.log('postdata::', data);
+    const { menues, ...data } = createPostDto;
+    // menues 필드를 배열로 변환
+    // const parsedMenues: CreateMenuDTO[] = JSON.parse(menues);
+    console.log(data);
+    console.log(menues);
     const newPost = this.postsRepository.create(data);
 
     const savedPost = await this.postsRepository.save(newPost);
