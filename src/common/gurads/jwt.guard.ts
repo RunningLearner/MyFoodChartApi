@@ -18,8 +18,6 @@ export class JwtGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const authHeader = request.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-    console.log('jwtguard called!!');
-    console.log(request);
     if (!token) {
       this.logger.warn('No token provided.');
       return false; // 토큰이 없는 경우 false를 반환

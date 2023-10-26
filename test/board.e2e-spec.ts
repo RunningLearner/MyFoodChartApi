@@ -75,19 +75,19 @@ describe('AppController (e2e)', () => {
     };
 
     // Assuming the post to be updated has ID 1
-    const postId = 1;
+    const postId = 59;
 
     return request(app.getHttpServer())
       .patch(`/boards/diet/${postId}`) // Assuming the update endpoint is PATCH /boards/diet/:id
       .set('authorization', `Bearer ${fakeToken}`)
-      .field('date', updateData.date)
+      .field('date', '2021-12-13')
       .field('institute', updateData.institute)
       .field('peopleNum', updateData.peopleNum)
       .field('price', updateData.price)
       .field('explanation', updateData.explanation)
       .field('whichSchool', updateData.whichSchool)
       .field('menues', JSON.stringify(updateData.menues))
-      .expect(204) // Assuming a 200 OK response is expected
+      .expect(200) // Assuming a 200 OK response is expected
       .then((response) => {
         expect(response.body).toBeDefined();
         // Additional assertions to verify the updated data

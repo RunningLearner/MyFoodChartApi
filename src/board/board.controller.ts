@@ -9,7 +9,7 @@ import {
   UseGuards,
   Inject,
   UseInterceptors,
-  Req,
+  HttpCode,
 } from '@nestjs/common';
 import { BoardServiceFactory } from './ board-service.factory';
 import { JwtGuard } from '../common/gurads/jwt.guard';
@@ -17,6 +17,7 @@ import { Logger as WinstonLogger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { CreatePostDto } from './dto/create-post.dto';
 import { FileInterceptor } from '../common/interceptors/file.interceptor';
+import { UpdatePostDto } from './dto/update-post.dto';
 
 @Controller('boards')
 export class BoardController {
@@ -28,13 +29,15 @@ export class BoardController {
   @UseGuards(JwtGuard)
   @UseInterceptors(FileInterceptor)
   @Post('/:type')
-  create(@Param('type') type: string, @Body() createDto: CreatePostDto) {
+  create(@Param('type') type: string, @Body() creatPostDto: CreatePostDto) {
     this.logger.info(
-      `게시글 생성 컨르롤러 호출됨. createDto: ${JSON.stringify(createDto)}`,
+      `게시글 생성 컨르롤러 호출됨. creatPostDto: ${JSON.stringify(
+        creatPostDto,
+      )}`,
     );
 
     const boardService = this.boardServiceFactory.getService(type);
-    return boardService.create(createDto);
+    return boardService.create(creatPostDto);
   }
 
   @Get()
@@ -43,20 +46,28 @@ export class BoardController {
     return boardService.findAll();
   }
 
-  @Get(':id')
+  @Get('/:id')
   findOne(@Param('type') type: string, @Param('id') id: string) {
     const boardService = this.boardServiceFactory.getService(type);
     return boardService.findOne(+id);
   }
 
-  @Patch(':id')
+  @UseGuards(JwtGuard)
+  @UseInterceptors(FileInterceptor)
+  @Patch('/:type/:id')
   update(
     @Param('type') type: string,
     @Param('id') id: string,
-    // @Body() updateBoardDto: UpdateBoardDto,
+    @Body() updatePostDto: UpdatePostDto,
   ) {
+    this.logger.info(
+      `게시글 수정 컨르롤러 호출됨. udatePostDto: ${JSON.stringify(
+        updatePostDto,
+      )}`,
+    );
+
     const boardService = this.boardServiceFactory.getService(type);
-    // return boardService.update(+id, updateBoardDto);
+    return boardService.update(+id, updatePostDto);
   }
 
   @Delete(':id')
