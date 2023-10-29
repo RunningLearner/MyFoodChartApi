@@ -42,11 +42,21 @@ export class BoardDietService {
   }
 
   async findAll() {
-    return `This action returns all board`;
+    this.logger.info(`diet post findAll service called`);
+    return await this.postsRepository.find();
   }
 
   async findOne(id: number) {
-    return `This action returns a #${id} board`;
+    this.logger.info(`diet post findOne service called`);
+
+    const foundPost = await this.postsRepository.findOne({
+      where: { id },
+    });
+
+    if (!foundPost) {
+      throw new NotFoundException(`Post with id ${id} not found`);
+    }
+    return foundPost;
   }
 
   async update(postId: number, updatePostDto: UpdatePostDto) {

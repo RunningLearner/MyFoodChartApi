@@ -20,6 +20,34 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
+  it('단일 게시글 조회', () => {
+    return request(app.getHttpServer())
+      .get('/boards/diet/60')
+      .expect(200)
+      .then((response) => {
+        expect(response.body).toBeDefined();
+        // 추가적으로 응답 데이터에 대한 검증 로직을 넣을 수 있습니다.
+        // 예를 들어:
+        expect(response.body.id).toEqual(60);
+        expect(response.body.date).toBeDefined();
+        // ... 기타 검증
+      });
+  });
+
+  it('전체 게시글 조회', () => {
+    return request(app.getHttpServer())
+      .get('/boards/diet')
+      .expect(200)
+      .then((response) => {
+        expect(response.body).toBeDefined();
+        // 추가적으로 응답 데이터에 대한 검증 로직을 넣을 수 있습니다.
+        // 예를 들어:
+        expect(Array.isArray(response.body)).toBeTruthy();
+        expect(response.body.length).toBeGreaterThan(0);
+        // ... 기타 검증
+      });
+  });
+
   it('게시글 생성', () => {
     const filePath1 = path.resolve(__dirname, './test-assets/testImage.jpeg');
     const filePath2 = path.resolve(__dirname, './test-assets/testFile.pdf');

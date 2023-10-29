@@ -40,14 +40,16 @@ export class BoardController {
     return boardService.create(creatPostDto);
   }
 
-  @Get()
+  @Get('/:type')
   findAll(@Param('type') type: string) {
+    this.logger.info(`게시글 조회 컨르롤러 호출됨.`);
     const boardService = this.boardServiceFactory.getService(type);
     return boardService.findAll();
   }
 
-  @Get('/:id')
+  @Get('/:type/:id')
   findOne(@Param('type') type: string, @Param('id') id: string) {
+    this.logger.info(`단일 게시글 조회 컨르롤러 호출됨. id: ${id}`);
     const boardService = this.boardServiceFactory.getService(type);
     return boardService.findOne(+id);
   }
