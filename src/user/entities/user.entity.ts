@@ -14,4 +14,7 @@ export class User {
 
   @Column({ type: 'text', nullable: true })
   name: string;
+
+  @Column({ type: 'boolean', nullable: true })
+  isDeleted: boolean;
 }

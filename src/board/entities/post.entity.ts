@@ -38,6 +38,9 @@ export class Post {
   @Column({ type: 'text' })
   whichSchool: string;
 
+  @Column({ type: 'boolean', nullable: true })
+  isDeleted: boolean;
+
   @OneToMany(() => Menu, (menu) => menu.post)
   menues: Menu[];
 

@@ -1,4 +1,9 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -7,6 +12,7 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Post } from './entities/post.entity';
 import { Menu } from './entities/menu.entity';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class BoardDietService {
@@ -16,6 +22,8 @@ export class BoardDietService {
     private postsRepository: Repository<Post>,
     @InjectRepository(Menu)
     private menuRepository: Repository<Menu>,
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
   ) {}
 
   async create(createPostDto: CreatePostDto) {
@@ -24,9 +32,22 @@ export class BoardDietService {
         createPostDto,
       )}`,
     );
+    console.log(createPostDto.userEmail);
+    const user = await this.usersRepository.findOne({
+      where: { email: createPostDto.userEmail },
+    });
+    console.log(user);
+    if (!user) {
+      throw new NotFoundException(
+        `이메일이 ${createPostDto.userEmail}인 사용자를 찾을 수 없습니다. `,
+      );
+    }
+
     const { menues, ...data } = createPostDto;
 
-    const newPost = this.postsRepository.create(data);
+    const newPostData = { ...data, user };
+
+    const newPost = this.postsRepository.create(newPostData);
 
     const savedPost = await this.postsRepository.save(newPost);
 
@@ -68,16 +89,21 @@ export class BoardDietService {
 
     const foundPost = await this.postsRepository.findOne({
       where: { id: postId },
+      relations: ['user'],
     });
 
     if (!foundPost) {
-      throw new NotFoundException(`Post with id ${postId} not found`);
+      throw new NotFoundException(`PostID ${postId}를 찾을 수 없습니다.`);
+    }
+
+    if (foundPost.user.email != updatePostDto.userEmail) {
+      throw new ForbiddenException(`작성자가 아닙니다!`);
     }
 
     // 메뉴 분리
-    const { menues, ...data } = updatePostDto;
+    const { menues, userEmail, ...data } = updatePostDto;
 
-    // Update the post data
+    // 객체를 덮어씌우기
     Object.assign(foundPost, data);
 
     const savedPost = await this.postsRepository.save(foundPost);
@@ -87,12 +113,15 @@ export class BoardDietService {
       const existingMenues = await this.menuRepository.find({
         where: { post: foundPost },
       });
+
+      // 기존에 연결되어 있던 메뉴를 삭제
       await this.menuRepository.remove(existingMenues);
 
-      // 새로운 걸로 생성
+      // 받아온 메뉴로 새로 생성
       const newMenues = this.menuRepository.create(
         menues.map((menu) => ({ ...menu, post: savedPost })),
       );
+
       await this.menuRepository.save(newMenues);
     }
 

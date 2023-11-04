@@ -3,6 +3,9 @@ import { UpdateMenuDTO } from './update-menu.dto';
 
 export class UpdatePostDto {
   @IsString()
+  userEmail: string;
+
+  @IsString()
   date: string;
 
   @IsString()

@@ -3,6 +3,9 @@ import { CreateMenuDTO } from './create-menu.dto';
 
 export class CreatePostDto {
   @IsString()
+  userEmail: string;
+
+  @IsString()
   date: string;
 
   @IsString()

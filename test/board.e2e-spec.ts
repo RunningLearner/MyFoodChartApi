@@ -10,6 +10,7 @@ describe('AppController (e2e)', () => {
   let app: INestApplication;
   const user = { email: 'test@test.com' };
   const fakeToken: string = jwt.sign(user, process.env.JWT_SECRET);
+  let postId = 0;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -78,6 +79,7 @@ describe('AppController (e2e)', () => {
       .expect(201)
       .then((response) => {
         expect(response.body).toBeDefined();
+        postId = response.body.id;
         // 여기에 추가적으로 응답 데이터에 대한 검증 로직을 넣을 수 있습니다.
       });
   });
@@ -101,9 +103,6 @@ describe('AppController (e2e)', () => {
         // ... other updated menu items
       ],
     };
-
-    // Assuming the post to be updated has ID 1
-    const postId = 59;
 
     return request(app.getHttpServer())
       .patch(`/boards/diet/${postId}`) // Assuming the update endpoint is PATCH /boards/diet/:id

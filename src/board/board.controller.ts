@@ -9,7 +9,7 @@ import {
   UseGuards,
   Inject,
   UseInterceptors,
-  HttpCode,
+  Request,
 } from '@nestjs/common';
 import { BoardServiceFactory } from './ board-service.factory';
 import { JwtGuard } from '../common/gurads/jwt.guard';
@@ -29,12 +29,19 @@ export class BoardController {
   @UseGuards(JwtGuard)
   @UseInterceptors(FileInterceptor)
   @Post('/:type')
-  create(@Param('type') type: string, @Body() creatPostDto: CreatePostDto) {
+  create(
+    @Param('type') type: string,
+    @Body() creatPostDto: CreatePostDto,
+    @Request() req,
+  ) {
     this.logger.info(
       `게시글 생성 컨르롤러 호출됨. creatPostDto: ${JSON.stringify(
         creatPostDto,
       )}`,
     );
+
+    // 인증된 유저 메일을 추가
+    creatPostDto.userEmail = req.user.email;
 
     const boardService = this.boardServiceFactory.getService(type);
     return boardService.create(creatPostDto);
@@ -61,12 +68,15 @@ export class BoardController {
     @Param('type') type: string,
     @Param('id') id: string,
     @Body() updatePostDto: UpdatePostDto,
+    @Request() req,
   ) {
     this.logger.info(
       `게시글 수정 컨르롤러 호출됨. udatePostDto: ${JSON.stringify(
         updatePostDto,
       )}`,
     );
+
+    updatePostDto.userEmail = req.user.email;
 
     const boardService = this.boardServiceFactory.getService(type);
     return boardService.update(+id, updatePostDto);
