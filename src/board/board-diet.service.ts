@@ -96,12 +96,12 @@ export class BoardDietService {
       throw new NotFoundException(`PostID ${postId}를 찾을 수 없습니다.`);
     }
 
-    if (foundPost.user.email != updatePostDto.userEmail) {
+    if (foundPost.user.email != updatePostDto.email) {
       throw new ForbiddenException(`작성자가 아닙니다!`);
     }
 
-    // 메뉴 분리
-    const { menues, userEmail, ...data } = updatePostDto;
+    // 메뉴와 이메일 분리
+    const { menues, email, ...data } = updatePostDto;
 
     // 객체를 덮어씌우기
     Object.assign(foundPost, data);
@@ -127,13 +127,27 @@ export class BoardDietService {
 
     if (savedPost) {
       this.logger.info(
-        `diet update service succeed. res:${JSON.stringify(savedPost)}`,
+        `post update service succeed. res:${JSON.stringify(savedPost)}`,
       );
     }
+
     return savedPost;
   }
 
   async remove(id: number) {
-    return `This action removes a #${id} board`;
+    this.logger.info(`diet post remove service called with Post ID: ${id}`);
+    const foundPost = await this.postsRepository.findOne({
+      where: { id },
+    });
+
+    if (!foundPost) {
+      throw new NotFoundException(`게시글 ID ${id}을 찾을 수 없습니다.`);
+    }
+
+    await this.postsRepository.remove(foundPost);
+
+    this.logger.info(`post remove service succeed with Post ID: ${id}`);
+
+    return `게시글 ID ${id}가 삭제되었습니다.`;
   }
 }

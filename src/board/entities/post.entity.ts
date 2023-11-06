@@ -4,7 +4,6 @@ import {
   Column,
   OneToMany,
   ManyToOne,
-  JoinColumn,
 } from 'typeorm';
 import { Menu } from './menu.entity';
 import { User } from '../../user/entities/user.entity';
@@ -45,6 +44,5 @@ export class Post {
   menues: Menu[];
 
   @ManyToOne(() => User, (user) => user.posts) // boards는 User 엔터티에서 Board 엔터티를 참조하는 필드입니다.
-  @JoinColumn({ name: 'userId' }) // DB에 저장될 컬럼 이름을 userId로 설정
   user: User;
 }

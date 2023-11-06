@@ -3,7 +3,7 @@ import { UpdateMenuDTO } from './update-menu.dto';
 
 export class UpdatePostDto {
   @IsString()
-  userEmail: string;
+  email: string;
 
   @IsString()
   date: string;

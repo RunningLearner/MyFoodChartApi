@@ -18,6 +18,6 @@ export class Menu {
   @Column({ type: 'text' })
   productBrand: string;
 
-  @ManyToOne(() => Post, (post) => post.menues)
+  @ManyToOne(() => Post, (post) => post.menues, { onDelete: 'CASCADE' })
   post: Post;
 }

@@ -21,34 +21,6 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('단일 게시글 조회', () => {
-    return request(app.getHttpServer())
-      .get('/boards/diet/60')
-      .expect(200)
-      .then((response) => {
-        expect(response.body).toBeDefined();
-        // 추가적으로 응답 데이터에 대한 검증 로직을 넣을 수 있습니다.
-        // 예를 들어:
-        expect(response.body.id).toEqual(60);
-        expect(response.body.date).toBeDefined();
-        // ... 기타 검증
-      });
-  });
-
-  it('전체 게시글 조회', () => {
-    return request(app.getHttpServer())
-      .get('/boards/diet')
-      .expect(200)
-      .then((response) => {
-        expect(response.body).toBeDefined();
-        // 추가적으로 응답 데이터에 대한 검증 로직을 넣을 수 있습니다.
-        // 예를 들어:
-        expect(Array.isArray(response.body)).toBeTruthy();
-        expect(response.body.length).toBeGreaterThan(0);
-        // ... 기타 검증
-      });
-  });
-
   it('게시글 생성', () => {
     const filePath1 = path.resolve(__dirname, './test-assets/testImage.jpeg');
     const filePath2 = path.resolve(__dirname, './test-assets/testFile.pdf');
@@ -63,7 +35,6 @@ describe('AppController (e2e)', () => {
       },
       // ... other menu items
     ];
-
     return request(app.getHttpServer())
       .post('/boards/diet')
       .set('authorization', `Bearer ${fakeToken}`)
@@ -81,6 +52,34 @@ describe('AppController (e2e)', () => {
         expect(response.body).toBeDefined();
         postId = response.body.id;
         // 여기에 추가적으로 응답 데이터에 대한 검증 로직을 넣을 수 있습니다.
+      });
+  });
+
+  it('단일 게시글 조회', () => {
+    return request(app.getHttpServer())
+      .get(`/boards/diet/${postId}`)
+      .expect(200)
+      .then((response) => {
+        expect(response.body).toBeDefined();
+        // 추가적으로 응답 데이터에 대한 검증 로직을 넣을 수 있습니다.
+        // 예를 들어:
+        expect(response.body.id).toEqual(postId);
+        expect(response.body.date).toBeDefined();
+        // ... 기타 검증
+      });
+  });
+
+  it('전체 게시글 조회', () => {
+    return request(app.getHttpServer())
+      .get('/boards/diet')
+      .expect(200)
+      .then((response) => {
+        expect(response.body).toBeDefined();
+        // 추가적으로 응답 데이터에 대한 검증 로직을 넣을 수 있습니다.
+        // 예를 들어:
+        expect(Array.isArray(response.body)).toBeTruthy();
+        expect(response.body.length).toBeGreaterThan(0);
+        // ... 기타 검증
       });
   });
 
@@ -121,6 +120,17 @@ describe('AppController (e2e)', () => {
         expect(response.body.date).toEqual(updateData.date);
         expect(response.body.institute).toEqual(updateData.institute);
         // ... other assertions
+      });
+  });
+
+  it('게시글 삭제', () => {
+    return request(app.getHttpServer())
+      .delete(`/boards/diet/${postId}`) // postId는 삭제하려는 게시글의 ID입니다.
+      .set('authorization', `Bearer ${fakeToken}`) // 인증 토큰 설정
+      .expect(200) // 성공적인 삭제 요청에 대해 200 OK 응답을 예상합니다.
+      .then((response) => {
+        expect(response.text).toEqual(`게시글 ID ${postId}가 삭제되었습니다.`);
+        // 추가적으로 삭제 후 데이터베이스에서 해당 게시글이 실제로 삭제되었는지 검증하는 로직을 추가할 수 있습니다.
       });
   });
 });

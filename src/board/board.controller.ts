@@ -28,7 +28,7 @@ export class BoardController {
 
   @UseGuards(JwtGuard)
   @UseInterceptors(FileInterceptor)
-  @Post('/:type')
+  @Post(':type')
   create(
     @Param('type') type: string,
     @Body() creatPostDto: CreatePostDto,
@@ -47,14 +47,14 @@ export class BoardController {
     return boardService.create(creatPostDto);
   }
 
-  @Get('/:type')
+  @Get(':type')
   findAll(@Param('type') type: string) {
     this.logger.info(`게시글 조회 컨르롤러 호출됨.`);
     const boardService = this.boardServiceFactory.getService(type);
     return boardService.findAll();
   }
 
-  @Get('/:type/:id')
+  @Get(':type/:id')
   findOne(@Param('type') type: string, @Param('id') id: string) {
     this.logger.info(`단일 게시글 조회 컨르롤러 호출됨. id: ${id}`);
     const boardService = this.boardServiceFactory.getService(type);
@@ -63,7 +63,7 @@ export class BoardController {
 
   @UseGuards(JwtGuard)
   @UseInterceptors(FileInterceptor)
-  @Patch('/:type/:id')
+  @Patch(':type/:id')
   update(
     @Param('type') type: string,
     @Param('id') id: string,
@@ -76,13 +76,13 @@ export class BoardController {
       )}`,
     );
 
-    updatePostDto.userEmail = req.user.email;
+    updatePostDto.email = req.user.email;
 
     const boardService = this.boardServiceFactory.getService(type);
     return boardService.update(+id, updatePostDto);
   }
 
-  @Delete(':id')
+  @Delete(':type/:id')
   remove(@Param('type') type: string, @Param('id') id: string) {
     const boardService = this.boardServiceFactory.getService(type);
     return boardService.remove(+id);
