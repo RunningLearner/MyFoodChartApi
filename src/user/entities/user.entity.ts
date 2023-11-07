@@ -1,3 +1,4 @@
+import { CommentDiet } from '../../comment/entities/comment-diet.entity';
 import { PostDiet } from '../../post/entities/post-diet.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
@@ -8,6 +9,9 @@ export class User {
 
   @OneToMany(() => PostDiet, (post) => post.user)
   posts: PostDiet[];
+
+  @OneToMany(() => CommentDiet, (comment) => comment.user)
+  commentsDiet: CommentDiet[];
 
   @Column({ type: 'text', unique: true })
   email: string;

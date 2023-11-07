@@ -7,7 +7,6 @@ import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostModule } from './post/post.module';
 import { LoggerModule } from './common/module/logger.module';
-import { CommentController } from './comment/comment.controller';
 import { CommentModule } from './comment/comment.module';
 
 @Module({
@@ -33,7 +32,7 @@ import { CommentModule } from './comment/comment.module';
     PostModule,
     CommentModule,
   ],
-  controllers: [AppController, CommentController],
+  controllers: [AppController],
   providers: [AppService],
   exports: [],
 })

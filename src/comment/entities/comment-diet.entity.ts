@@ -7,10 +7,10 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
-import { DietPost } from 'src/post/entities/diet-post.entity';
+import { PostDiet } from '../../post/entities/post-diet.entity';
 
 @Entity()
-export class DietComment {
+export class CommentDiet {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -23,8 +23,8 @@ export class DietComment {
   @Column({ type: 'text' })
   content: string;
 
-  @ManyToOne(() => DietPost, (post) => post.comments)
-  post: DietPost;
+  @ManyToOne(() => PostDiet, (post) => post.comments)
+  post: PostDiet;
 
   @ManyToOne(() => User, (user) => user.posts)
   user: User;

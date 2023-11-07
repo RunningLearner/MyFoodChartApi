@@ -6,9 +6,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Menu } from './entities/menu.entity';
 import { PostDiet } from './entities/post-diet.entity';
 import { User } from '../user/entities/user.entity';
+import { CommentDiet } from '../comment/entities/comment-diet.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PostDiet, Menu, User])],
+  imports: [TypeOrmModule.forFeature([PostDiet, Menu, User, CommentDiet])],
   controllers: [PostController],
   providers: [PostServiceFactory, PostDietService],
 })
