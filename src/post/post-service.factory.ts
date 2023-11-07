@@ -1,21 +1,21 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { BoardDietService } from './board-diet.service';
+import { PostDietService } from './post-diet.service';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger as WinstonLogger } from 'winston';
 
 @Injectable()
-export class BoardServiceFactory {
+export class PostServiceFactory {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: WinstonLogger,
     // private readonly boardAService: BoardAService,
     // private readonly boardBService: BoardBService,
-    private readonly boardDietService: BoardDietService,
+    private readonly postDietService: PostDietService,
   ) {}
 
   getService(type: string) {
     try {
       if (type === 'diet') {
-        return this.boardDietService;
+        return this.postDietService;
       }
       // else if (type === 'A') {
       //   return this.boardAService;

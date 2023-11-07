@@ -12,7 +12,7 @@ import { User } from '../../user/entities/user.entity';
 import { DietComment } from 'src/comment/entities/diet-comment.entity';
 
 @Entity()
-export class DietPost {
+export class PostDiet {
   @PrimaryGeneratedColumn()
   id: number;
 
