@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Logger as WinstonLogger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { Post } from './entities/post.entity';
+import { DietPost } from './entities/diet-post.entity';
 import { Menu } from './entities/menu.entity';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { User } from '../user/entities/user.entity';
@@ -18,8 +18,8 @@ import { User } from '../user/entities/user.entity';
 export class BoardDietService {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: WinstonLogger,
-    @InjectRepository(Post)
-    private postsRepository: Repository<Post>,
+    @InjectRepository(DietPost)
+    private postsRepository: Repository<DietPost>,
     @InjectRepository(Menu)
     private menuRepository: Repository<Menu>,
     @InjectRepository(User)

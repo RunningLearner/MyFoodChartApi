@@ -5,8 +5,10 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BoardModule } from './board/board.module';
+import { BoardModule } from './post/board.module';
 import { LoggerModule } from './common/module/logger.module';
+import { CommentController } from './comment/comment.controller';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -29,8 +31,9 @@ import { LoggerModule } from './common/module/logger.module';
     AuthModule,
     UserModule,
     BoardModule,
+    CommentModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, CommentController],
   providers: [AppService],
   exports: [],
 })
