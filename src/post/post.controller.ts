@@ -19,8 +19,8 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { FileInterceptor } from '../common/interceptors/file.interceptor';
 import { UpdatePostDto } from './dto/update-post.dto';
 
-@Controller('boards')
-export class PostController {
+@Controller('posts')
+export class PostsController {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: WinstonLogger,
     private readonly boardServiceFactory: PostServiceFactory,
