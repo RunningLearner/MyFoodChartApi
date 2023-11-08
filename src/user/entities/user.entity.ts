@@ -1,4 +1,5 @@
-import { Post } from '../../board/entities/post.entity';
+import { CommentDiet } from '../../comment/entities/comment-diet.entity';
+import { PostDiet } from '../../post/entities/post-diet.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
@@ -6,8 +7,11 @@ export class User {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @OneToMany(() => Post, (post) => post.user)
-  posts: Post[];
+  @OneToMany(() => PostDiet, (post) => post.user)
+  posts: PostDiet[];
+
+  @OneToMany(() => CommentDiet, (comment) => comment.user)
+  commentsDiet: CommentDiet[];
 
   @Column({ type: 'text', unique: true })
   email: string;

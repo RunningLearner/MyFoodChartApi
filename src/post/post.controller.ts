@@ -11,7 +11,7 @@ import {
   UseInterceptors,
   Request,
 } from '@nestjs/common';
-import { BoardServiceFactory } from './ board-service.factory';
+import { PostServiceFactory } from './post-service.factory';
 import { JwtGuard } from '../common/gurads/jwt.guard';
 import { Logger as WinstonLogger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
@@ -20,10 +20,10 @@ import { FileInterceptor } from '../common/interceptors/file.interceptor';
 import { UpdatePostDto } from './dto/update-post.dto';
 
 @Controller('boards')
-export class BoardController {
+export class PostController {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: WinstonLogger,
-    private readonly boardServiceFactory: BoardServiceFactory,
+    private readonly boardServiceFactory: PostServiceFactory,
   ) {}
 
   @UseGuards(JwtGuard)
