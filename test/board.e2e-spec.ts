@@ -5,12 +5,14 @@ import { AppModule } from '../src/app.module';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as jwt from 'jsonwebtoken';
+import * as commentTest from './commentTestFunctions';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   const user = { email: 'test@test.com' };
   const fakeToken: string = jwt.sign(user, process.env.JWT_SECRET);
   let postId = 0;
+  let commentId: number;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -53,6 +55,22 @@ describe('AppController (e2e)', () => {
         postId = response.body.id;
         // 여기에 추가적으로 응답 데이터에 대한 검증 로직을 넣을 수 있습니다.
       });
+  });
+
+  it('댓글 생성', async () => {
+    commentId = await commentTest.createComment(app, fakeToken, postId);
+  });
+
+  it('댓글 조회', async () => {
+    await commentTest.getComment(app, commentId);
+  });
+
+  it('댓글 수정', async () => {
+    await commentTest.updateComment(app, fakeToken, commentId);
+  });
+
+  it('댓글 삭제', async () => {
+    await commentTest.deleteComment(app, fakeToken, commentId);
   });
 
   it('단일 게시글 조회', () => {
