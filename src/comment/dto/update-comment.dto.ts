@@ -1,4 +1,9 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateCommentDto } from './create-comment.dto';
+import { IsString, IsOptional } from 'class-validator';
 
-export class UpdateCommentDto extends PartialType(CreateCommentDto) {}
+export class UpdateCommentDietDto {
+  @IsString()
+  @IsOptional()
+  readonly content?: string;
+
+  // 여기에 다른 수정 가능한 필드를 추가할 수 있습니다.
+}

@@ -6,17 +6,24 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
-import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
+import { CreateCommentDietDto } from './dto/create-comment.dto';
+import { UpdateCommentDietDto } from './dto/update-comment.dto';
+import { JwtGuard } from '../common/gurads/jwt.guard';
 
 @Controller('comments')
 export class CommentsController {
   constructor(private readonly commentService: CommentService) {}
 
+  @UseGuards(JwtGuard)
   @Post(':type')
-  create(@Body() createCommentDto: CreateCommentDto) {
+  create(@Body() createCommentDto: CreateCommentDietDto, @Req() req) {
+    // 인증된 유저 메일을 추가
+    createCommentDto.userEmail = req.user.email;
+
     return this.commentService.create(createCommentDto);
   }
 
@@ -31,7 +38,10 @@ export class CommentsController {
   }
 
   @Patch(':type/:id')
-  update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateCommentDto: UpdateCommentDietDto,
+  ) {
     return this.commentService.update(+id, updateCommentDto);
   }
 
