@@ -61,7 +61,11 @@ describe('AppController (e2e)', () => {
     commentId = await commentTest.createComment(app, fakeToken, postId);
   });
 
-  it('댓글 조회', async () => {
+  it('전체 댓글 조회', async () => {
+    await commentTest.getAllComment(app);
+  });
+
+  it('단일 댓글 조회', async () => {
     await commentTest.getComment(app, commentId);
   });
 

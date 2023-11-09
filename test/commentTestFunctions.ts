@@ -8,6 +8,7 @@ export const createComment = async (app, fakeToken, postId) => {
     .expect(201)
     .then((response) => {
       expect(response.body.id).toBeDefined();
+      expect(response.body.content).toEqual('댓글 내용');
       return response.body.id; // 생성된 댓글 ID 반환
     });
 };
@@ -15,6 +16,15 @@ export const createComment = async (app, fakeToken, postId) => {
 export const getComment = async (app, commentId) => {
   return request(app.getHttpServer())
     .get(`/comments/diet/${commentId}`)
+    .expect(200)
+    .then((response) => {
+      expect(response.body.content).toEqual('댓글 내용');
+    });
+};
+
+export const getAllComment = async (app) => {
+  return request(app.getHttpServer())
+    .get(`/comments/diet`)
     .expect(200)
     .then((response) => {
       expect(response.body).toBeDefined();

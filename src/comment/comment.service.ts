@@ -40,12 +40,16 @@ export class CommentService {
     return newComment;
   }
 
-  findAll() {
-    return `This action returns all comment`;
+  async findAll() {
+    const foundComments = await this.commentsDietRepository.find();
+    return foundComments;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} comment`;
+  async findOne(id: number) {
+    const foundComment = await this.commentsDietRepository.findOne({
+      where: { id },
+    });
+    return foundComment;
   }
 
   update(id: number, updateCommentDto: UpdateCommentDietDto) {
