@@ -82,9 +82,10 @@ export class PostsController {
     return boardService.update(+id, updatePostDto);
   }
 
+  @UseGuards(JwtGuard)
   @Delete(':type/:id')
-  remove(@Param('type') type: string, @Param('id') id: string) {
+  remove(@Param('type') type: string, @Param('id') id: string, @Request() req) {
     const boardService = this.boardServiceFactory.getService(type);
-    return boardService.remove(+id);
+    return boardService.remove(+id, req.user.email);
   }
 }
