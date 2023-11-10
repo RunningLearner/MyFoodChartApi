@@ -37,11 +37,16 @@ export class CommentsController {
     return this.commentService.findOne(+id);
   }
 
+  @UseGuards(JwtGuard)
   @Patch(':type/:id')
   update(
     @Param('id') id: string,
     @Body() updateCommentDto: UpdateCommentDietDto,
+    @Req() req,
   ) {
+    // 인증된 유저 메일을 추가
+    updateCommentDto.userEmail = req.user.email;
+
     return this.commentService.update(+id, updateCommentDto);
   }
 
