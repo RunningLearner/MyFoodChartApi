@@ -28,7 +28,7 @@ export class PostDietService {
 
   async create(createPostDto: CreatePostDto) {
     this.logger.info(
-      `diet post create service called createpostdto: ${JSON.stringify(
+      `diet post create service 호출 createpostdto: ${JSON.stringify(
         createPostDto,
       )}`,
     );
@@ -64,6 +64,7 @@ export class PostDietService {
 
   async findAll() {
     this.logger.info(`diet post findAll service called`);
+
     return await this.postsRepository.find();
   }
 
@@ -77,12 +78,13 @@ export class PostDietService {
     if (!foundPost) {
       throw new NotFoundException(`Post with id ${id} not found`);
     }
+
     return foundPost;
   }
 
   async update(postId: number, updatePostDto: UpdatePostDto) {
     this.logger.info(
-      `diet post update service called updatePostDto: ${JSON.stringify(
+      `diet post update service 호출 updatePostDto: ${JSON.stringify(
         updatePostDto,
       )}`,
     );
