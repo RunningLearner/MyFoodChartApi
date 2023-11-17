@@ -18,6 +18,7 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { CreatePostDto } from './dto/create-post.dto';
 import { FileInterceptor } from '../common/interceptors/file.interceptor';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { LogParamsAndReturn } from '../common/interceptors/log.interceptor';
 
 @Controller('posts')
 export class PostsController {
@@ -29,16 +30,17 @@ export class PostsController {
   @UseGuards(JwtGuard)
   @UseInterceptors(FileInterceptor)
   @Post(':type')
+  @LogParamsAndReturn()
   create(
     @Param('type') type: string,
     @Body() creatPostDto: CreatePostDto,
     @Request() req,
   ) {
-    this.logger.info(
-      `게시글 생성 컨르롤러 호출됨. creatPostDto: ${JSON.stringify(
-        creatPostDto,
-      )}`,
-    );
+    // this.logger.info(
+    //   `게시글 생성 컨르롤러 호출됨. creatPostDto: ${JSON.stringify(
+    //     creatPostDto,
+    //   )}`,
+    // );
 
     // 인증된 유저 메일을 추가
     creatPostDto.userEmail = req.user.email;

@@ -8,8 +8,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostModule } from './post/post.module';
 import { LoggerModule } from './common/module/logger.module';
 import { CommentModule } from './comment/comment.module';
-import { APP_INTERCEPTOR } from '@nestjs/core';
-import { LoggingInterceptor } from './common/interceptors/log.interceptor';
 
 @Module({
   imports: [
@@ -35,13 +33,7 @@ import { LoggingInterceptor } from './common/interceptors/log.interceptor';
     CommentModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: LoggingInterceptor,
-    },
-  ],
+  providers: [AppService],
   exports: [],
 })
 export class AppModule {}
