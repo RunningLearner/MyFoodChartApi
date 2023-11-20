@@ -13,7 +13,7 @@ import { PostDiet } from './entities/post-diet.entity';
 import { Menu } from './entities/menu.entity';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { User } from '../user/entities/user.entity';
-import { LogParamsAndReturn } from '../common/interceptors/log.interceptor';
+import { LogParamsAndReturn } from '../common/decorators/params-and-return.decorator';
 
 @Injectable()
 export class PostDietService {
@@ -29,12 +29,6 @@ export class PostDietService {
 
   @LogParamsAndReturn()
   async create(createPostDto: CreatePostDto) {
-    // this.logger.info(
-    //   `diet post create service 호출 createpostdto: ${JSON.stringify(
-    //     createPostDto,
-    //   )}`,
-    // );
-    console.log('게시글생성호출됨');
     const user = await this.usersRepository.findOne({
       where: { email: createPostDto.userEmail },
     });
@@ -64,12 +58,14 @@ export class PostDietService {
     return savedPost;
   }
 
+  @LogParamsAndReturn()
   async findAll() {
     // this.logger.info(`diet post findAll service called`);
 
     return await this.postsRepository.find();
   }
 
+  @LogParamsAndReturn()
   async findOne(id: number) {
     // this.logger.info(`diet post findOne service called`);
 
@@ -84,13 +80,8 @@ export class PostDietService {
     return foundPost;
   }
 
+  @LogParamsAndReturn()
   async update(postId: number, updatePostDto: UpdatePostDto) {
-    // this.logger.info(
-    //   `diet post update service 호출 updatePostDto: ${JSON.stringify(
-    //     updatePostDto,
-    //   )}`,
-    // );
-
     const foundPost = await this.postsRepository.findOne({
       where: { id: postId },
       relations: ['user'],
@@ -138,8 +129,8 @@ export class PostDietService {
     return savedPost;
   }
 
+  @LogParamsAndReturn()
   async remove(id: number, userEmail: string) {
-    // this.logger.info(`diet post remove service called with Post ID: ${id}`);
     const foundPost = await this.postsRepository.findOne({
       where: { id },
       relations: ['user'],
@@ -154,8 +145,6 @@ export class PostDietService {
     }
 
     await this.postsRepository.remove(foundPost);
-
-    // this.logger.info(`post remove service succeed with Post ID: ${id}`);
 
     return `게시글 ID ${id}가 삭제되었습니다.`;
   }

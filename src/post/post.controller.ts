@@ -18,7 +18,7 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { CreatePostDto } from './dto/create-post.dto';
 import { FileInterceptor } from '../common/interceptors/file.interceptor';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { LogParamsAndReturn } from '../common/interceptors/log.interceptor';
+import { LogParamsAndReturn } from '../common/decorators/params-and-return.decorator';
 
 @Controller('posts')
 export class PostsController {
@@ -36,12 +36,6 @@ export class PostsController {
     @Body() creatPostDto: CreatePostDto,
     @Request() req,
   ) {
-    // this.logger.info(
-    //   `게시글 생성 컨르롤러 호출됨. creatPostDto: ${JSON.stringify(
-    //     creatPostDto,
-    //   )}`,
-    // );
-
     // 인증된 유저 메일을 추가
     creatPostDto.userEmail = req.user.email;
 
@@ -50,6 +44,7 @@ export class PostsController {
   }
 
   @Get(':type')
+  @LogParamsAndReturn()
   findAll(@Param('type') type: string) {
     this.logger.info(`게시글 조회 컨르롤러 호출됨.`);
     const boardService = this.boardServiceFactory.getService(type);
@@ -57,6 +52,7 @@ export class PostsController {
   }
 
   @Get(':type/:id')
+  @LogParamsAndReturn()
   findOne(@Param('type') type: string, @Param('id') id: string) {
     this.logger.info(`단일 게시글 조회 컨르롤러 호출됨. id: ${id}`);
     const boardService = this.boardServiceFactory.getService(type);
@@ -66,6 +62,7 @@ export class PostsController {
   @UseGuards(JwtGuard)
   @UseInterceptors(FileInterceptor)
   @Patch(':type/:id')
+  @LogParamsAndReturn()
   update(
     @Param('type') type: string,
     @Param('id') id: string,
@@ -86,6 +83,7 @@ export class PostsController {
 
   @UseGuards(JwtGuard)
   @Delete(':type/:id')
+  @LogParamsAndReturn()
   remove(@Param('type') type: string, @Param('id') id: string, @Request() req) {
     const boardService = this.boardServiceFactory.getService(type);
     return boardService.remove(+id, req.user.email);

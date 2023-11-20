@@ -6,16 +6,26 @@ export function LogParamsAndReturn(): MethodDecorator {
     const className = target.constructor.name;
     const originalMethod = descriptor.value;
 
+    const safeStringify = (obj: any): string => {
+      return inspect(obj, { depth: null });
+    };
+
     descriptor.value = function (...args: any[]) {
-      const reqIndex = args.findIndex(
-        (arg) => arg && typeof arg === 'object' && 'body' in arg,
-      );
-      const reqBody = reqIndex >= 0 ? args[reqIndex].body : null;
+      let methodArgs;
+
+      if (className.includes('Controller')) {
+        const reqIndex = args.findIndex(
+          (arg) => arg && typeof arg === 'object' && 'body' in arg,
+        );
+        methodArgs = reqIndex >= 0 ? args[reqIndex].body : null;
+      } else {
+        methodArgs = args;
+      }
 
       if (this.logger) {
         this.logger.info(
           `${className} ${propertyName.toString()} 호출. Args: [${safeStringify(
-            reqBody,
+            methodArgs,
           )}]`,
         );
       }
@@ -28,11 +38,6 @@ export function LogParamsAndReturn(): MethodDecorator {
 
       return result;
     };
-
     return descriptor;
   };
-}
-
-function safeStringify(obj: any): string {
-  return inspect(obj, { depth: null });
 }
