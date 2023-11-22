@@ -9,8 +9,6 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDto } from './dto/user.dto';
-import { FindOneOptions } from 'typeorm';
-import { User } from './entities/user.entity';
 
 @Controller('user')
 export class UserController {
@@ -28,10 +26,7 @@ export class UserController {
 
   @Get(':email')
   findOne(@Param('email') email: string) {
-    const options: FindOneOptions<User> = {
-      where: { email },
-    };
-    return this.userService.findOne(options);
+    return this.userService.findOne(email);
   }
 
   @Patch(':email')

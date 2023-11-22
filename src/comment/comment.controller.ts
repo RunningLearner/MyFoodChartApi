@@ -13,6 +13,7 @@ import { CommentService } from './comment.service';
 import { CreateCommentDietDto } from './dto/create-comment.dto';
 import { UpdateCommentDietDto } from './dto/update-comment.dto';
 import { JwtGuard } from '../common/gurads/jwt.guard';
+import { AdminGuard } from '../common/gurads/role.guard';
 
 @Controller('comments')
 export class CommentsController {
@@ -51,6 +52,7 @@ export class CommentsController {
   }
 
   @Delete(':type/:id')
+  @UseGuards(JwtGuard, AdminGuard)
   remove(@Param('id') id: string) {
     return this.commentService.remove(+id);
   }

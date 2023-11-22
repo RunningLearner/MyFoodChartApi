@@ -4,35 +4,49 @@ import {
   ExecutionContext,
   Inject,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { Logger as WinstonLogger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from '../../user/entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class JwtGuard implements CanActivate {
   constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: WinstonLogger,
   ) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const authHeader = request.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
+
     if (!token) {
-      this.logger.warn('No token provided.');
-      return false; // 토큰이 없는 경우 false를 반환
+      throw new UnauthorizedException('토큰이 존재하지 않습니다.');
     }
 
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const userEmail = (decoded as jwt.JwtPayload).email;
 
-      if (!request.user) {
-        request.user = {};
+      // 사용자 repo를 통해 사용자 정보를 가져옴
+      const user = await this.usersRepository.findOne({
+        where: { email: userEmail },
+      });
+
+      if (!user) {
+        throw new NotFoundException(`${userEmail} 사용자를 찾을 수 없습니다.`);
       }
 
-      request.user.email = (decoded as jwt.JwtPayload).email;
-      this.logger.info(`로그인 성공 유저: ${JSON.stringify(decoded)}`);
+      if (!request.user) request.user = {};
+      request.user.email = user.email;
+      request.user.role = user.role;
+
       return true;
     } catch (e) {
       this.logger.warn(
