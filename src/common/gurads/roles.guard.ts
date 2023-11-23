@@ -4,7 +4,6 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserRole } from '../../user/entities/user.entity';
 import { Reflector } from '@nestjs/core';
 
 @Injectable()

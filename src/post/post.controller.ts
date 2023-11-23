@@ -18,7 +18,7 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { CreatePostDto } from './dto/create-post.dto';
 import { FileInterceptor } from '../common/interceptors/file.interceptor';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { LogParamsAndReturn } from '../common/decorators/params-and-return.decorator';
+import { CustomLoggerDecorator } from '../common/decorators/custom-logger.decorator';
 import { Roles } from '../common/decorators/roles.decorator';
 import { RolesGuard } from '../common/gurads/roles.guard';
 
@@ -33,7 +33,7 @@ export class PostsController {
   @Roles('user', 'admin')
   @UseInterceptors(FileInterceptor)
   @Post(':type')
-  @LogParamsAndReturn()
+  @CustomLoggerDecorator()
   create(
     @Param('type') type: string,
     @Body() creatPostDto: CreatePostDto,
@@ -47,7 +47,7 @@ export class PostsController {
   }
 
   @Get(':type')
-  @LogParamsAndReturn()
+  @CustomLoggerDecorator()
   findAll(@Param('type') type: string) {
     this.logger.info(`게시글 조회 컨르롤러 호출됨.`);
     const boardService = this.boardServiceFactory.getService(type);
@@ -55,7 +55,7 @@ export class PostsController {
   }
 
   @Get(':type/:id')
-  @LogParamsAndReturn()
+  @CustomLoggerDecorator()
   findOne(@Param('type') type: string, @Param('id') id: string) {
     this.logger.info(`단일 게시글 조회 컨르롤러 호출됨. id: ${id}`);
     const boardService = this.boardServiceFactory.getService(type);
@@ -66,19 +66,13 @@ export class PostsController {
   @Roles('user', 'admin')
   @UseInterceptors(FileInterceptor)
   @Patch(':type/:id')
-  @LogParamsAndReturn()
+  @CustomLoggerDecorator()
   update(
     @Param('type') type: string,
     @Param('id') id: string,
     @Body() updatePostDto: UpdatePostDto,
     @Request() req,
   ) {
-    this.logger.info(
-      `게시글 수정 컨르롤러 호출됨. udatePostDto: ${JSON.stringify(
-        updatePostDto,
-      )}`,
-    );
-
     updatePostDto.email = req.user.email;
 
     const boardService = this.boardServiceFactory.getService(type);
@@ -88,7 +82,7 @@ export class PostsController {
   @UseGuards(JwtGuard, RolesGuard)
   @Roles('user', 'admin')
   @Delete(':type/:id')
-  @LogParamsAndReturn()
+  @CustomLoggerDecorator()
   remove(@Param('type') type: string, @Param('id') id: string, @Request() req) {
     const boardService = this.boardServiceFactory.getService(type);
     return boardService.remove(+id, req.user.email);

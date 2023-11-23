@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostModule } from './post/post.module';
 import { LoggerModule } from './common/module/logger.module';
 import { CommentModule } from './comment/comment.module';
+import { RequestIdMiddleware } from './common/middlewares/request-id.middleware';
 
 @Module({
   imports: [
@@ -36,4 +37,8 @@ import { CommentModule } from './comment/comment.module';
   providers: [AppService],
   exports: [],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestIdMiddleware).forRoutes('*'); // 모든 라우트에 적용
+  }
+}

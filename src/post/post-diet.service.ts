@@ -13,7 +13,7 @@ import { PostDiet } from './entities/post-diet.entity';
 import { Menu } from './entities/menu.entity';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { User } from '../user/entities/user.entity';
-import { LogParamsAndReturn } from '../common/decorators/params-and-return.decorator';
+import { CustomLoggerDecorator } from '../common/decorators/custom-logger.decorator';
 
 @Injectable()
 export class PostDietService {
@@ -27,7 +27,7 @@ export class PostDietService {
     private usersRepository: Repository<User>,
   ) {}
 
-  @LogParamsAndReturn()
+  @CustomLoggerDecorator()
   async create(createPostDto: CreatePostDto) {
     const user = await this.usersRepository.findOne({
       where: { email: createPostDto.userEmail },
@@ -58,14 +58,14 @@ export class PostDietService {
     return savedPost;
   }
 
-  @LogParamsAndReturn()
+  @CustomLoggerDecorator()
   async findAll() {
     // this.logger.info(`diet post findAll service called`);
 
     return await this.postsRepository.find();
   }
 
-  @LogParamsAndReturn()
+  @CustomLoggerDecorator()
   async findOne(id: number) {
     // this.logger.info(`diet post findOne service called`);
 
@@ -80,7 +80,7 @@ export class PostDietService {
     return foundPost;
   }
 
-  @LogParamsAndReturn()
+  @CustomLoggerDecorator()
   async update(postId: number, updatePostDto: UpdatePostDto) {
     const foundPost = await this.postsRepository.findOne({
       where: { id: postId },
@@ -129,7 +129,7 @@ export class PostDietService {
     return savedPost;
   }
 
-  @LogParamsAndReturn()
+  @CustomLoggerDecorator()
   async remove(id: number, userEmail: string) {
     const foundPost = await this.postsRepository.findOne({
       where: { id },
