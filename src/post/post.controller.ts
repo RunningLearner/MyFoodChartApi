@@ -19,6 +19,8 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { FileInterceptor } from '../common/interceptors/file.interceptor';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { LogParamsAndReturn } from '../common/decorators/params-and-return.decorator';
+import { Roles } from '../common/decorators/roles.decorator';
+import { RolesGuard } from '../common/gurads/roles.guard';
 
 @Controller('posts')
 export class PostsController {
@@ -27,7 +29,8 @@ export class PostsController {
     private readonly boardServiceFactory: PostServiceFactory,
   ) {}
 
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles('user', 'admin')
   @UseInterceptors(FileInterceptor)
   @Post(':type')
   @LogParamsAndReturn()
@@ -59,7 +62,8 @@ export class PostsController {
     return boardService.findOne(+id);
   }
 
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles('user', 'admin')
   @UseInterceptors(FileInterceptor)
   @Patch(':type/:id')
   @LogParamsAndReturn()
@@ -81,7 +85,8 @@ export class PostsController {
     return boardService.update(+id, updatePostDto);
   }
 
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles('user', 'admin')
   @Delete(':type/:id')
   @LogParamsAndReturn()
   remove(@Param('type') type: string, @Param('id') id: string, @Request() req) {

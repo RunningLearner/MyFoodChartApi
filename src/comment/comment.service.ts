@@ -24,6 +24,7 @@ export class CommentService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
+
   async create(createCommentDto: CreateCommentDietDto) {
     const newComment = new CommentDiet();
     newComment.content = createCommentDto.content;

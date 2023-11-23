@@ -59,15 +59,12 @@ describe('UserService', () => {
       mockRepository.findOne.mockReturnValue(Promise.resolve(user));
 
       // findOne 호출
-      const options: FindOneOptions<User> = {
-        where: { email: 'test@email.com' },
-      };
-      const result = await service.findOne(options);
+      const result = await service.findOne(user.email);
 
       expect(result).toEqual(user);
 
       // findOne 메서드가 올바른 파라미터로 호출되었는지 확인
-      expect(mockRepository.findOne).toHaveBeenCalledWith(options);
+      expect(mockRepository.findOne).toHaveBeenCalledWith(user.email);
     });
   });
 
