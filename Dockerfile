@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # 서버가 사용할 포트 번호 설정 (NestJS 기본값은 3000)
-EXPOSE 3001
+EXPOSE 5000
 
 # 실행할 명령어 설정
 CMD ["npm", "run", "start"]
