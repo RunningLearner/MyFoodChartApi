@@ -1,8 +1,8 @@
 import {
-  ForbiddenException,
   Inject,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,6 +13,7 @@ import { PostDiet } from './entities/post-diet.entity';
 import { Menu } from './entities/menu.entity';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { User } from '../user/entities/user.entity';
+import { CustomLoggerDecorator } from '../common/decorators/custom-logger.decorator';
 
 @Injectable()
 export class PostDietService {
@@ -26,17 +27,12 @@ export class PostDietService {
     private usersRepository: Repository<User>,
   ) {}
 
+  @CustomLoggerDecorator()
   async create(createPostDto: CreatePostDto) {
-    this.logger.info(
-      `diet post create service called createpostdto: ${JSON.stringify(
-        createPostDto,
-      )}`,
-    );
-    console.log(createPostDto.userEmail);
     const user = await this.usersRepository.findOne({
       where: { email: createPostDto.userEmail },
     });
-    console.log(user);
+
     if (!user) {
       throw new NotFoundException(
         `이메일이 ${createPostDto.userEmail}인 사용자를 찾을 수 없습니다. `,
@@ -62,13 +58,16 @@ export class PostDietService {
     return savedPost;
   }
 
+  @CustomLoggerDecorator()
   async findAll() {
-    this.logger.info(`diet post findAll service called`);
+    // this.logger.info(`diet post findAll service called`);
+
     return await this.postsRepository.find();
   }
 
+  @CustomLoggerDecorator()
   async findOne(id: number) {
-    this.logger.info(`diet post findOne service called`);
+    // this.logger.info(`diet post findOne service called`);
 
     const foundPost = await this.postsRepository.findOne({
       where: { id },
@@ -77,16 +76,12 @@ export class PostDietService {
     if (!foundPost) {
       throw new NotFoundException(`Post with id ${id} not found`);
     }
+
     return foundPost;
   }
 
+  @CustomLoggerDecorator()
   async update(postId: number, updatePostDto: UpdatePostDto) {
-    this.logger.info(
-      `diet post update service called updatePostDto: ${JSON.stringify(
-        updatePostDto,
-      )}`,
-    );
-
     const foundPost = await this.postsRepository.findOne({
       where: { id: postId },
       relations: ['user'],
@@ -96,12 +91,12 @@ export class PostDietService {
       throw new NotFoundException(`PostID ${postId}를 찾을 수 없습니다.`);
     }
 
-    if (foundPost.user.email != updatePostDto.email) {
-      throw new ForbiddenException(`작성자가 아닙니다!`);
-    }
-
     // 메뉴와 이메일 분리
     const { menues, email, ...data } = updatePostDto;
+
+    if (foundPost.user.email != email) {
+      throw new UnauthorizedException(`게시글을 수정할 권한이 없습니다.`);
+    }
 
     // 객체를 덮어씌우기
     Object.assign(foundPost, data);
@@ -126,27 +121,30 @@ export class PostDietService {
     }
 
     if (savedPost) {
-      this.logger.info(
-        `post update service succeed. res:${JSON.stringify(savedPost)}`,
-      );
+      // this.logger.info(
+      //   `post update service succeed. res:${JSON.stringify(savedPost)}`,
+      // );
     }
 
     return savedPost;
   }
 
-  async remove(id: number) {
-    this.logger.info(`diet post remove service called with Post ID: ${id}`);
+  @CustomLoggerDecorator()
+  async remove(id: number, userEmail: string) {
     const foundPost = await this.postsRepository.findOne({
       where: { id },
+      relations: ['user'],
     });
 
     if (!foundPost) {
       throw new NotFoundException(`게시글 ID ${id}을 찾을 수 없습니다.`);
     }
 
-    await this.postsRepository.remove(foundPost);
+    if (foundPost.user.email !== userEmail) {
+      throw new UnauthorizedException(`게시글을 수정할 권한이 없습니다.`);
+    }
 
-    this.logger.info(`post remove service succeed with Post ID: ${id}`);
+    await this.postsRepository.remove(foundPost);
 
     return `게시글 ID ${id}가 삭제되었습니다.`;
   }

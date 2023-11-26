@@ -6,17 +6,27 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
-import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
+import { CreateCommentDietDto } from './dto/create-comment.dto';
+import { UpdateCommentDietDto } from './dto/update-comment.dto';
+import { JwtGuard } from '../common/gurads/jwt.guard';
+import { RolesGuard } from '../common/gurads/roles.guard';
+import { Roles } from '../common/decorators/roles.decorator';
 
-@Controller('comment')
-export class CommentController {
+@Controller('comments')
+export class CommentsController {
   constructor(private readonly commentService: CommentService) {}
 
   @Post(':type')
-  create(@Body() createCommentDto: CreateCommentDto) {
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles('user', 'admin')
+  create(@Body() createCommentDto: CreateCommentDietDto, @Req() req) {
+    // 인증된 유저 메일을 추가
+    createCommentDto.userEmail = req.user.email;
+
     return this.commentService.create(createCommentDto);
   }
 
@@ -31,11 +41,22 @@ export class CommentController {
   }
 
   @Patch(':type/:id')
-  update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles('admin')
+  update(
+    @Param('id') id: string,
+    @Body() updateCommentDto: UpdateCommentDietDto,
+    @Req() req,
+  ) {
+    // 인증된 유저 메일을 추가
+    updateCommentDto.userEmail = req.user.email;
+
     return this.commentService.update(+id, updateCommentDto);
   }
 
   @Delete(':type/:id')
+  @UseGuards(JwtGuard)
+  @Roles('admin')
   remove(@Param('id') id: string) {
     return this.commentService.remove(+id);
   }

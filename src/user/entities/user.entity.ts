@@ -2,6 +2,11 @@ import { CommentDiet } from '../../comment/entities/comment-diet.entity';
 import { PostDiet } from '../../post/entities/post-diet.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
+export enum UserRole {
+  ADMIN = 'admin',
+  USER = 'user',
+}
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('increment')
@@ -18,6 +23,13 @@ export class User {
 
   @Column({ type: 'text', nullable: true })
   name: string;
+
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.USER,
+  })
+  role: UserRole;
 
   @Column({ type: 'boolean', nullable: true })
   isDeleted: boolean;

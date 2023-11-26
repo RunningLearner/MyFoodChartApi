@@ -5,12 +5,14 @@ import { AppModule } from '../src/app.module';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as jwt from 'jsonwebtoken';
+import * as commentTest from './commentTestFunctions';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   const user = { email: 'test@test.com' };
   const fakeToken: string = jwt.sign(user, process.env.JWT_SECRET);
   let postId = 0;
+  let commentId: number;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -36,7 +38,7 @@ describe('AppController (e2e)', () => {
       // ... other menu items
     ];
     return request(app.getHttpServer())
-      .post('/boards/diet')
+      .post('/posts/diet')
       .set('authorization', `Bearer ${fakeToken}`)
       .field('date', '2021-12-12') // 별도의 필드로 추가
       .field('institute', 'Test Institute')
@@ -55,9 +57,29 @@ describe('AppController (e2e)', () => {
       });
   });
 
+  it('댓글 생성', async () => {
+    commentId = await commentTest.createComment(app, fakeToken, postId);
+  });
+
+  it('전체 댓글 조회', async () => {
+    await commentTest.getAllComment(app);
+  });
+
+  it('단일 댓글 조회', async () => {
+    await commentTest.getComment(app, commentId);
+  });
+
+  it('댓글 수정', async () => {
+    await commentTest.updateComment(app, fakeToken, commentId);
+  });
+
+  it('댓글 삭제', async () => {
+    await commentTest.deleteComment(app, fakeToken, commentId);
+  });
+
   it('단일 게시글 조회', () => {
     return request(app.getHttpServer())
-      .get(`/boards/diet/${postId}`)
+      .get(`/posts/diet/${postId}`)
       .expect(200)
       .then((response) => {
         expect(response.body).toBeDefined();
@@ -71,7 +93,7 @@ describe('AppController (e2e)', () => {
 
   it('전체 게시글 조회', () => {
     return request(app.getHttpServer())
-      .get('/boards/diet')
+      .get('/posts/diet')
       .expect(200)
       .then((response) => {
         expect(response.body).toBeDefined();
@@ -104,7 +126,7 @@ describe('AppController (e2e)', () => {
     };
 
     return request(app.getHttpServer())
-      .patch(`/boards/diet/${postId}`) // Assuming the update endpoint is PATCH /boards/diet/:id
+      .patch(`/posts/diet/${postId}`) // Assuming the update endpoint is PATCH /boards/diet/:id
       .set('authorization', `Bearer ${fakeToken}`)
       .field('date', '2021-12-13')
       .field('institute', updateData.institute)
@@ -125,7 +147,7 @@ describe('AppController (e2e)', () => {
 
   it('게시글 삭제', () => {
     return request(app.getHttpServer())
-      .delete(`/boards/diet/${postId}`) // postId는 삭제하려는 게시글의 ID입니다.
+      .delete(`/posts/diet/${postId}`) // postId는 삭제하려는 게시글의 ID입니다.
       .set('authorization', `Bearer ${fakeToken}`) // 인증 토큰 설정
       .expect(200) // 성공적인 삭제 요청에 대해 200 OK 응답을 예상합니다.
       .then((response) => {

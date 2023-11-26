@@ -19,7 +19,7 @@ async function bootstrap() {
 
   app.useGlobalFilters(new HttpExceptionFilter(winstonLogger));
 
-  const port = process.env.PORT || 3001;
+  const port = process.env.PORT || 5000;
 
   app.enableCors({
     origin: 'http://localhost:3000',

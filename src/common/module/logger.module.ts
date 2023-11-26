@@ -22,6 +22,7 @@ import { utilities as nestWinstonModuleUtilities } from 'nest-winston';
             new winston.transports.Console({
               format: winston.format.combine(
                 winston.format.colorize(),
+                winston.format.json(),
                 winston.format.simple(),
               ),
             }),

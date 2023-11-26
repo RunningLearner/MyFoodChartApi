@@ -14,12 +14,9 @@ export class AuthService {
   async OAuthLogin(req, res) {
     //const userInfo = req.user; // Google에서 전달받은 사용자 정보
     const email = req.user.email;
-    const options: FindOneOptions<User> = {
-      where: { email },
-    };
 
     // 1. 회원조회
-    let user = await this.userService.findOne(options); //user를 찾아서
+    let user = await this.userService.findOne(email); //user를 찾아서
     let accessToken: string;
 
     // 2, 회원가입이 안되어있다면?

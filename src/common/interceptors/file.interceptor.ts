@@ -74,10 +74,8 @@ export class FileInterceptor implements NestInterceptor {
 
     // 컨트롤러에서는 이미 메뉴를 타입이 있는 상태로 인지해서 파싱할 수가 없음
     // 따라서 임시로 여기서 파싱
-    console.log(request.body);
     const menuesParsed = JSON.parse(request.body.menues);
     request.body.menues = menuesParsed;
-    console.log(request.body);
 
     return next.handle();
   }
