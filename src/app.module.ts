@@ -24,7 +24,7 @@ import { RequestIdMiddleware } from './common/middlewares/request-id.middleware'
       password: '1234',
       database: 'mfc',
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: false,
       entities: ['dist/**/*.entity{.ts,.js}'],
     }),
     LoggerModule,
