@@ -9,11 +9,12 @@ import { PostModule } from './post/post.module';
 import { LoggerModule } from './common/module/logger.module';
 import { CommentModule } from './comment/comment.module';
 import { RequestIdMiddleware } from './common/middlewares/request-id.middleware';
+import { LogdataModule } from './logdata/logdata.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `.env`,
+      envFilePath: `.env.${process.env.NODE_ENV}`,
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
@@ -32,6 +33,7 @@ import { RequestIdMiddleware } from './common/middlewares/request-id.middleware'
     UserModule,
     PostModule,
     CommentModule,
+    LogdataModule,
   ],
   controllers: [AppController],
   providers: [AppService],

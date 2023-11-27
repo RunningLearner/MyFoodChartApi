@@ -3,6 +3,7 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import * as winston from 'winston';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { utilities as nestWinstonModuleUtilities } from 'nest-winston';
+import * as DailyRotateFile from 'winston-daily-rotate-file';
 
 @Global()
 @Module({
@@ -19,15 +20,19 @@ import { utilities as nestWinstonModuleUtilities } from 'nest-winston';
             nestWinstonModuleUtilities.format.nestLike(),
           ),
           transports: [
+            new DailyRotateFile({
+              filename: 'logs/application-%DATE%.log',
+              datePattern: 'YYYY-MM-DD',
+              zippedArchive: true,
+              maxSize: '20m',
+              maxFiles: '14d',
+            }),
             new winston.transports.Console({
               format: winston.format.combine(
                 winston.format.colorize(),
                 winston.format.json(),
                 winston.format.simple(),
               ),
-            }),
-            new winston.transports.File({
-              filename: 'application.log',
             }),
           ],
         });
