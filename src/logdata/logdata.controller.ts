@@ -7,7 +7,7 @@ import * as path from 'path';
 export class LogdataController {
   @Get('download')
   async downloadLogs(@Res() response: Response) {
-    const logsFolderPath = path.join(__dirname, '../../');
+    const logsFolderPath = path.join(__dirname, '../../logs');
     const archive = archiver('zip', {
       zlib: { level: 9 },
     });
