@@ -1,4 +1,11 @@
-import { Controller, Get, UseGuards, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  UseGuards,
+  Req,
+  Res,
+  HttpStatus,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { NaverAuthGuard } from './gurads/naver-auth.guard';
 import { KakaoAuthGuard } from './gurads/kakao-auth.guard';
@@ -37,5 +44,11 @@ export class AuthController {
     console.log('kakaologincallback called!');
     this.authService.OAuthLogin(req, res);
     res.redirect('http://localhost:3000/');
+  }
+
+  @Get('logout')
+  async logout(@Res() res) {
+    res.clearCookie('access_token'); // JWT 쿠키 제거
+    res.status(HttpStatus.OK).json({ isLogIn: false });
   }
 }
