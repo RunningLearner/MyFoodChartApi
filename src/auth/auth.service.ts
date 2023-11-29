@@ -9,7 +9,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async OAuthLogin(req, res) {
+  async OAuthLogin(req) {
     //const userInfo = req.user; // 소셜로그인을 통해 전달받은 사용자 정보
     const email = req.user.email;
 
@@ -27,9 +27,6 @@ export class AuthService {
     const payload = { username: user.name, email: user.email };
     const accessToken = this.jwtService.sign(payload);
 
-    // cookie 메서드를 사용할 수 있습니다.
-    res.cookie('access_token', accessToken, { httpOnly: true, secure: true });
-    // 프론트가 전역으로 사용할 로그인 상태
-    res.json({ isLogIn: true });
+    return accessToken;
   }
 }

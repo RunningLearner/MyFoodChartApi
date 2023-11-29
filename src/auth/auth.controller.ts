@@ -26,8 +26,14 @@ export class AuthController {
     // 사용자 정보는 req.user에 저장됩니다.
     // 로그인 처리를 여기에서 합니다.
     console.log('naverlogincallback called!');
-    this.authService.OAuthLogin(req, res);
-    res.redirect('http://localhost:3000/');
+    const accessToken = await this.authService.OAuthLogin(req);
+    // cookie 메서드를 사용할 수 있습니다.
+    res.cookie('access_token', accessToken, {
+      httpOnly: true,
+      secure: true,
+    });
+
+    res.redirect(`${process.env.FRONT_HOST}/home`);
   }
 
   @UseGuards(KakaoAuthGuard) // 여기에서 'naver'는 NaverStrategy의 이름과 일치해야 합니다.
@@ -42,8 +48,14 @@ export class AuthController {
     // 사용자 정보는 req.user에 저장됩니다.
     // 로그인 처리를 여기에서 합니다.
     console.log('kakaologincallback called!');
-    this.authService.OAuthLogin(req, res);
-    res.redirect('http://localhost:3000/');
+    const accessToken = await this.authService.OAuthLogin(req);
+    // cookie 메서드를 사용할 수 있습니다.
+    res.cookie('access_token', accessToken, {
+      httpOnly: true,
+      secure: true,
+    });
+
+    res.redirect(`${process.env.FRONT_HOST}/home`);
   }
 
   @Get('logout')
