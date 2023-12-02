@@ -14,7 +14,6 @@ import { LogdataModule } from './logdata/logdata.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `.env.${process.env.NODE_ENV}`,
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
