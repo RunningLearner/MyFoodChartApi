@@ -30,10 +30,10 @@ jobs:
     runs-on: self-hosted
     steps:
     - name: Pull Latest Docker Image
-      run: docker pull runninglearner/recipesoupapi:latest
+      run: sudo docker pull runninglearner/recipesoupapi:latest
 
     - name: Restart app using Docker Compose
       run: |
         cd /home/adminuser/SetupRecipeSoup
-        docker-compose down
-        docker-compose up
+        sudo docker-compose down
+        sudo docker-compose up
