@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  UseGuards,
-  Req,
-  Res,
-  HttpStatus,
-  Inject,
-} from '@nestjs/common';
+import { Controller, Get, UseGuards, Req, Res, Inject } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { NaverAuthGuard } from './gurads/naver-auth.guard';
 import { KakaoAuthGuard } from './gurads/kakao-auth.guard';
@@ -68,10 +60,17 @@ export class AuthController {
     res.redirect(`${process.env.DOMAIN}/home`);
   }
 
+  @Get('status')
+  @CustomLoggerDecorator()
+  async status(@Req() req, @Res() res) {
+    const loginStatus: boolean = req.cookies['access_token'] ? true : false;
+    res.json({ isLogIn: loginStatus });
+  }
+
   @Get('logout')
   @CustomLoggerDecorator()
   async logout(@Res() res) {
     res.clearCookie('access_token'); // JWT 쿠키 제거
-    res.status(HttpStatus.OK).json({ isLogIn: false });
+    res.redirect(`${process.env.DOMAIN}/home`);
   }
 }
