@@ -12,7 +12,7 @@ export class AuthController {
     private readonly authService: AuthService,
   ) {}
 
-  @UseGuards(NaverAuthGuard) // 여기에서 'naver'는 NaverStrategy의 이름과 일치해야 합니다.
+  @UseGuards(NaverAuthGuard)
   @Get('login/naver')
   @CustomLoggerDecorator()
   async naverLogin() {
@@ -36,11 +36,11 @@ export class AuthController {
     res.redirect(`${process.env.DOMAIN}/home`);
   }
 
-  @UseGuards(KakaoAuthGuard) // 여기에서 'naver'는 NaverStrategy의 이름과 일치해야 합니다.
+  @UseGuards(KakaoAuthGuard)
   @Get('login/kakao')
   @CustomLoggerDecorator()
   async kakaoLogin() {
-    // 함수 본문은 실행되지 않습니다. Guard에 의해 Naver 로그인 페이지로 리다이렉트됩니다.
+    // 함수 본문은 실행되지 않습니다.
   }
 
   @UseGuards(KakaoAuthGuard)
