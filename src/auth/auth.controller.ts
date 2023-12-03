@@ -36,7 +36,7 @@ export class AuthController {
       secure: true,
     });
 
-    res.redirect(`${process.env.FRONT_HOST}/home`);
+    res.redirect(`${process.env.DOMAIN}/home`);
   }
 
   @UseGuards(KakaoAuthGuard) // 여기에서 'naver'는 NaverStrategy의 이름과 일치해야 합니다.
@@ -60,7 +60,7 @@ export class AuthController {
       secure: true,
     });
 
-    res.redirect(`${process.env.FRONT_HOST}/home`);
+    res.redirect(`${process.env.DOMAIN}/home`);
   }
 
   @Get('logout')
