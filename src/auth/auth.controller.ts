@@ -5,15 +5,20 @@ import {
   Req,
   Res,
   HttpStatus,
+  Inject,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { NaverAuthGuard } from './gurads/naver-auth.guard';
 import { KakaoAuthGuard } from './gurads/kakao-auth.guard';
 import { CustomLoggerDecorator } from 'src/common/decorators/custom-logger.decorator';
+import { WINSTON_MODULE_PROVIDER, WinstonLogger } from 'nest-winston';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: WinstonLogger,
+    private readonly authService: AuthService,
+  ) {}
 
   @UseGuards(NaverAuthGuard) // 여기에서 'naver'는 NaverStrategy의 이름과 일치해야 합니다.
   @Get('login/naver')
