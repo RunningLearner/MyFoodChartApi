@@ -27,6 +27,7 @@ jobs:
         tags: runninglearner/recipesoupapi:latest
         
   deploy:
+    needs: build
     runs-on: self-hosted
     steps:
     - name: Pull Latest Docker Image
