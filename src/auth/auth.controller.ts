@@ -9,6 +9,7 @@ import {
 import { AuthService } from './auth.service';
 import { NaverAuthGuard } from './gurads/naver-auth.guard';
 import { KakaoAuthGuard } from './gurads/kakao-auth.guard';
+import { CustomLoggerDecorator } from 'src/common/decorators/custom-logger.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -16,12 +17,14 @@ export class AuthController {
 
   @UseGuards(NaverAuthGuard) // 여기에서 'naver'는 NaverStrategy의 이름과 일치해야 합니다.
   @Get('login/naver')
+  @CustomLoggerDecorator()
   async naverLogin() {
     // 함수 본문은 실행되지 않습니다. Guard에 의해 Naver 로그인 페이지로 리다이렉트됩니다.
   }
 
   @UseGuards(NaverAuthGuard)
   @Get('login/naver/callback')
+  @CustomLoggerDecorator()
   async naverLoginCallback(@Req() req, @Res() res) {
     // 사용자 정보는 req.user에 저장됩니다.
     // 로그인 처리를 여기에서 합니다.
@@ -38,12 +41,14 @@ export class AuthController {
 
   @UseGuards(KakaoAuthGuard) // 여기에서 'naver'는 NaverStrategy의 이름과 일치해야 합니다.
   @Get('login/kakao')
+  @CustomLoggerDecorator()
   async kakaoLogin() {
     // 함수 본문은 실행되지 않습니다. Guard에 의해 Naver 로그인 페이지로 리다이렉트됩니다.
   }
 
   @UseGuards(KakaoAuthGuard)
   @Get('login/kakao/callback')
+  @CustomLoggerDecorator()
   async kakaoLoginCallback(@Req() req, @Res() res) {
     // 사용자 정보는 req.user에 저장됩니다.
     // 로그인 처리를 여기에서 합니다.
@@ -59,6 +64,7 @@ export class AuthController {
   }
 
   @Get('logout')
+  @CustomLoggerDecorator()
   async logout(@Res() res) {
     res.clearCookie('access_token'); // JWT 쿠키 제거
     res.status(HttpStatus.OK).json({ isLogIn: false });
