@@ -38,7 +38,7 @@ export class AuthController {
     // cookie 메서드를 사용할 수 있습니다.
     res.cookie('access_token', accessToken, {
       httpOnly: true,
-      secure: true,
+      // secure: true,
     });
 
     res.redirect(`${process.env.DOMAIN}/home`);
@@ -62,7 +62,7 @@ export class AuthController {
     // cookie 메서드를 사용할 수 있습니다.
     res.cookie('access_token', accessToken, {
       httpOnly: true,
-      secure: true,
+      // secure: true,
     });
 
     res.redirect(`${process.env.DOMAIN}/home`);
