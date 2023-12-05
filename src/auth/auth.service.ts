@@ -22,10 +22,12 @@ export class AuthService {
       user = await this.userService.create({ ...req.user });
     }
 
-    // 3. 회원가입이 되어있다면? 로그인(AT, RT를 생성해서 브라우저에 전송)한다
+    // 3. 회원가입이 되었다면? 로그인(AT를 생성해서 브라우저에 전송)한다
     // JWT 토큰 생성
     const payload = { username: user.name, email: user.email };
-    const accessToken = this.jwtService.sign(payload);
+    const accessToken = this.jwtService.sign(payload, {
+      expiresIn: '1d', // 토큰 유효기간 하루 설정
+    });
 
     return accessToken;
   }
