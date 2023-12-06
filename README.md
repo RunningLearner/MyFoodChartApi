@@ -28,7 +28,10 @@
 
 ## 관련 Repo
 [frontend](https://github.com/isjennifer/MyFoodChart)
+
 [deploy](https://github.com/RunningLearner/SetupRecipeSoup)
+
+[local monitoring](https://github.com/RunningLearner/docker_elk)
 
 ## Contact
 email : tkacnsdms@naver.com
