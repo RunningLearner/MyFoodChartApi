@@ -6,9 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDto } from './dto/user.dto';
+import { JwtGuard } from 'src/common/gurads/jwt.guard';
 
 @Controller('users')
 export class UserController {
@@ -24,9 +27,18 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @Get(':email')
-  findOne(@Param('email') email: string) {
-    return this.userService.findOne(email);
+  @Get(':id')
+  findOne(@Param('id') id: number) {
+    return this.userService.findOne(id);
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('aboutme')
+  findMe(@Request() req) {
+    // 인증된 유저 메일을 추가
+    const email = req.user.email;
+
+    return this.userService.findMe(email);
   }
 
   @Patch(':email')
