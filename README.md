@@ -1,4 +1,4 @@
-# [사이트 방문하기](http://recipesoup.koreacentral.cloudapp.azure.com/)
+# [사이트 방문하기](http://recipesoup.koreacentral.cloudapp.azure.com/home)
 
 ## 개요
 - 영양사들이 자신의 식단을 공유할 수 있는 커뮤니티 입니다.
