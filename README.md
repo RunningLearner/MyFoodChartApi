@@ -25,6 +25,9 @@
 [frontend](https://github.com/isjennifer/MyFoodChart)
 [deploy](https://github.com/RunningLearner/SetupRecipeSoup)
 
+## Contact
+email : tkacnsdms@naver.com
+
 ## License
 
 Nest is [MIT licensed](LICENSE).
