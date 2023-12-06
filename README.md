@@ -24,7 +24,7 @@
 
 
 ## 아키텍쳐
-![image](https://github.com/RunningLearner/RecipeSoupApi/assets/97277365/fd6098c5-04d9-4132-b324-f29858865e87)
+![image](https://github.com/RunningLearner/RecipeSoupApi/assets/97277365/81015212-f962-44d6-885e-5a0bad5550c0)
 
 ## ERD
 
