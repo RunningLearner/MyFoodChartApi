@@ -26,6 +26,12 @@
 
 ## ERD
 
+## 모니터링(개발 중)
+![image](https://github.com/RunningLearner/RecipeSoupApi/assets/97277365/5447da48-19bc-4db0-8ffe-0edfcbaeb72f)
+- 모니터링 전용 서버는 추후에 수익이 생기면...
+- 하나의 VM에서 모니터링까지 하기에도 무리가...
+- 당분간은 로컬에서 매일 아침과 퇴근 후 모니터링 합시다.
+
 ## 관련 Repo
 [frontend](https://github.com/isjennifer/MyFoodChart)
 
