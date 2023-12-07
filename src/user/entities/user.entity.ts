@@ -1,8 +1,8 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CommentDiet } from '../../comment/entities/comment-diet.entity';
 import { CommentFree } from '../../comment/entities/comment-free.entity';
-import { PostDiet } from '../../post/entities/post-diet.entity';
-import { PostFree } from '../../post/entities/post-free.entity';
+import { PostDiet } from '../../post-diet/entities/post-diet.entity';
+import { PostFree } from '../../post-free/entities/post-free.entity';
 
 export enum UserRole {
   ADMIN = 'admin',

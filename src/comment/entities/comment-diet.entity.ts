@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PostDiet } from '../../post/entities/post-diet.entity';
+import { PostDiet } from '../../post-diet/entities/post-diet.entity';
 import { User } from '../../user/entities/user.entity';
 
 @Entity()

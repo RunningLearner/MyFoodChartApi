@@ -1,7 +1,7 @@
 import { IsString, IsArray } from 'class-validator';
 import { UpdateMenuDTO } from './update-menu.dto';
 
-export class UpdatePostDto {
+export class UpdatePostDietDto {
   @IsString()
   email: string;
 

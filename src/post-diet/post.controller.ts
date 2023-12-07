@@ -19,20 +19,20 @@ import { JwtGuard } from '../common/gurads/jwt.guard';
 import { RolesGuard } from '../common/gurads/roles.guard';
 import { FileInterceptor } from '../common/interceptors/file.interceptor';
 import { CreatePostDietDto } from './dto/create-post-diet.dto';
-import { UpdatePostDto } from './dto/update-post-diet.dto';
-import { PostServiceFactory } from './post-service.factory';
+import { UpdatePostDietDto } from './dto/update-post-diet.dto';
+import { PostDietService } from './post-diet.service';
 
 @Controller('posts')
 export class PostsController {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: WinstonLogger,
-    private readonly boardServiceFactory: PostServiceFactory,
+    private readonly postDietService: PostDietService,
   ) {}
 
   @UseGuards(JwtGuard, RolesGuard)
   @Roles('user', 'admin')
   @UseInterceptors(FileInterceptor)
-  @Post(':type')
+  @Post('diet')
   @CustomLoggerDecorator()
   create(
     @Param('type') type: string,
@@ -42,23 +42,19 @@ export class PostsController {
     // 인증된 유저 메일을 추가
     creatPostDto.userEmail = req.user.email;
 
-    const boardService = this.boardServiceFactory.getService(type);
-    return boardService.create(creatPostDto);
+    return this.postDietService.create(creatPostDto);
   }
 
-  @Get(':type')
+  @Get('diet')
   @CustomLoggerDecorator()
   findAll(@Param('type') type: string) {
-    const boardService = this.boardServiceFactory.getService(type);
-    return boardService.findAll();
+    return this.postDietService.findAll();
   }
 
-  @Get(':type/:id')
+  @Get('diet/:id')
   @CustomLoggerDecorator()
   findOne(@Param('type') type: string, @Param('id') id: string) {
-    this.logger.info(`단일 게시글 조회 컨르롤러 호출됨. id: ${id}`);
-    const boardService = this.boardServiceFactory.getService(type);
-    return boardService.findOne(+id);
+    return this.postDietService.findOne(+id);
   }
 
   @UseGuards(JwtGuard, RolesGuard)
@@ -69,13 +65,12 @@ export class PostsController {
   update(
     @Param('type') type: string,
     @Param('id') id: string,
-    @Body() updatePostDto: UpdatePostDto,
+    @Body() updatePostDto: UpdatePostDietDto,
     @Request() req,
   ) {
     updatePostDto.email = req.user.email;
 
-    const boardService = this.boardServiceFactory.getService(type);
-    return boardService.update(+id, updatePostDto);
+    return this.postDietService.update(+id, updatePostDto);
   }
 
   @UseGuards(JwtGuard, RolesGuard)
@@ -83,7 +78,6 @@ export class PostsController {
   @Delete(':type/:id')
   @CustomLoggerDecorator()
   remove(@Param('type') type: string, @Param('id') id: string, @Request() req) {
-    const boardService = this.boardServiceFactory.getService(type);
-    return boardService.remove(+id, req.user.email);
+    return this.postDietService.remove(+id, req.user.email);
   }
 }

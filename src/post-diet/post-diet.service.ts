@@ -12,7 +12,7 @@ import { CustomLoggerDecorator } from '../common/decorators/custom-logger.decora
 import { User } from '../user/entities/user.entity';
 import { CreatePostDietDto } from './dto/create-post-diet.dto';
 import { DietReturnAllDto, DietReturnDto } from './dto/diet-return.dto';
-import { UpdatePostDto } from './dto/update-post-diet.dto';
+import { UpdatePostDietDto } from './dto/update-post-diet.dto';
 import { Menu } from './entities/menu.entity';
 import { PostDiet } from './entities/post-diet.entity';
 
@@ -83,7 +83,7 @@ export class PostDietService {
   }
 
   @CustomLoggerDecorator()
-  async update(postId: number, updatePostDto: UpdatePostDto) {
+  async update(postId: number, updatePostDto: UpdatePostDietDto) {
     const foundPost = await this.postsDietRepository.findOne({
       where: { id: postId },
       relations: ['user'],

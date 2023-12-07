@@ -15,7 +15,8 @@ export class UserService {
 
   async create(createUserDto: UserDto) {
     const newUser = await this.usersRepository.create(createUserDto);
-    return await this.usersRepository.save(newUser);
+    await this.usersRepository.save(newUser);
+    return UserReturnDto.fromEntity(newUser);
   }
 
   async findAll() {

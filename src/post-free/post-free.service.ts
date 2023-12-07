@@ -10,10 +10,9 @@ import { Repository } from 'typeorm';
 import { Logger as WinstonLogger } from 'winston';
 import { CustomLoggerDecorator } from '../common/decorators/custom-logger.decorator';
 import { User } from '../user/entities/user.entity';
-import { DietReturnAllDto, DietReturnDto } from './dto/diet-return.dto';
-import { UpdatePostDto } from './dto/update-post-diet.dto';
 import { PostFree } from './entities/post-free.entity';
 import { CreatePostFreeDto } from './dto/create-post-free.dto';
+import { UpdatePostFreeDto } from './dto/update-post-free.dto';
 
 @Injectable()
 export class PostFreeService {
@@ -45,16 +44,16 @@ export class PostFreeService {
   }
 
   @CustomLoggerDecorator()
-  async findAll(): Promise<DietReturnAllDto[]> {
+  async findAll() {
     const result = await this.postsFreeRepository.find({
       relations: ['user'],
     });
 
-    return result.map((post) => DietReturnAllDto.fromEntity(post));
+    return result;
   }
 
   @CustomLoggerDecorator()
-  async findOne(id: number): Promise<DietReturnDto> {
+  async findOne(id: number) {
     const foundPost = await this.postsFreeRepository.findOne({
       where: { id },
       relations: ['user'],
@@ -64,11 +63,11 @@ export class PostFreeService {
       throw new NotFoundException(`Post with id ${id} not found`);
     }
 
-    return DietReturnDto.fromEntity(foundPost);
+    return foundPost;
   }
 
   @CustomLoggerDecorator()
-  async update(postId: number, updatePostDto: UpdatePostDto) {
+  async update(postId: number, updatePostDto: UpdatePostFreeDto) {
     const foundPost = await this.postsFreeRepository.findOne({
       where: { id: postId },
       relations: ['user'],
@@ -78,9 +77,9 @@ export class PostFreeService {
       throw new NotFoundException(`PostID ${postId}를 찾을 수 없습니다.`);
     }
 
-    const { email, ...data } = updatePostDto;
+    const { userEmail, ...data } = updatePostDto;
 
-    if (foundPost.user.email != email) {
+    if (foundPost.user.email != userEmail) {
       throw new UnauthorizedException(`게시글을 수정할 권한이 없습니다.`);
     }
 

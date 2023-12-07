@@ -7,13 +7,14 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { WINSTON_MODULE_PROVIDER, WinstonLogger } from 'nest-winston';
 import { Repository } from 'typeorm';
-import { PostDiet } from '../post/entities/post-diet.entity';
+import { PostDiet } from '../post-diet/entities/post-diet.entity';
 import { User } from '../user/entities/user.entity';
 import { CommentReturnDto } from './dto/comment-return.dto';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDietDto } from './dto/update-comment.dto';
 import { CommentDiet } from './entities/comment-diet.entity';
 import { CommentFree } from './entities/comment-free.entity';
+import { PostFree } from 'src/post-free/entities/post-free.entity';
 
 @Injectable()
 export class CommentService {
@@ -22,7 +23,9 @@ export class CommentService {
     @InjectRepository(CommentDiet)
     private commentsDietRepository: Repository<CommentDiet>,
     @InjectRepository(PostDiet)
-    private postsRepository: Repository<PostDiet>,
+    private postsDietRepository: Repository<PostDiet>,
+    @InjectRepository(PostFree)
+    private postsFreeRepository: Repository<PostFree>,
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
@@ -39,9 +42,14 @@ export class CommentService {
     newComment.user = foundUser;
 
     // 레포구분하기
-    const foundPost = await this.postsRepository.findOne({
-      where: { type: createCommentDto.type, id: +createCommentDto.postId },
-    });
+    const foundPost =
+      createCommentDto.type === 'diet'
+        ? await this.postsDietRepository.findOne({
+            where: { id: +createCommentDto.postId },
+          })
+        : await this.postsFreeRepository.findOne({
+            where: { id: +createCommentDto.postId },
+          });
 
     newComment.post = foundPost;
 

@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PostFree } from '../../post/entities/post-free.entity';
+import { PostFree } from '../../post-free/entities/post-free.entity';
 import { User } from '../../user/entities/user.entity';
 
 @Entity()
