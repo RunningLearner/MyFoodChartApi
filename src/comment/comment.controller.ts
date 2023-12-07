@@ -1,20 +1,20 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  UseGuards,
+  Get,
+  Param,
+  Patch,
+  Post,
   Req,
+  UseGuards,
 } from '@nestjs/common';
-import { CommentService } from './comment.service';
-import { CreateCommentDietDto } from './dto/create-comment.dto';
-import { UpdateCommentDietDto } from './dto/update-comment.dto';
+import { Roles } from '../common/decorators/roles.decorator';
 import { JwtGuard } from '../common/gurads/jwt.guard';
 import { RolesGuard } from '../common/gurads/roles.guard';
-import { Roles } from '../common/decorators/roles.decorator';
+import { CommentService } from './comment.service';
+import { CreateCommentDto } from './dto/create-comment.dto';
+import { UpdateCommentDietDto } from './dto/update-comment.dto';
 
 @Controller('comments')
 export class CommentsController {
@@ -23,9 +23,14 @@ export class CommentsController {
   @Post(':type')
   @UseGuards(JwtGuard, RolesGuard)
   @Roles('user', 'admin')
-  create(@Body() createCommentDto: CreateCommentDietDto, @Req() req) {
+  create(
+    @Param('type') type: string,
+    @Body() createCommentDto: CreateCommentDto,
+    @Req() req,
+  ) {
     // 인증된 유저 메일을 추가
     createCommentDto.userEmail = req.user.email;
+    createCommentDto.type = type;
 
     return this.commentService.create(createCommentDto);
   }

@@ -1,6 +1,8 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CommentDiet } from '../../comment/entities/comment-diet.entity';
+import { CommentFree } from '../../comment/entities/comment-free.entity';
 import { PostDiet } from '../../post/entities/post-diet.entity';
+import { PostFree } from '../../post/entities/post-free.entity';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -26,6 +28,12 @@ export class User {
 
   @OneToMany(() => CommentDiet, (comment) => comment.user)
   commentsDiet: CommentDiet[];
+
+  @OneToMany(() => PostDiet, (post) => post.user)
+  postsFree: PostFree[];
+
+  @OneToMany(() => CommentDiet, (comment) => comment.user)
+  commentsFree: CommentFree[];
 
   @Column({
     type: 'enum',

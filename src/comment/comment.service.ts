@@ -4,14 +4,16 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CreateCommentDietDto } from './dto/create-comment.dto';
-import { UpdateCommentDietDto } from './dto/update-comment.dto';
-import { CommentDiet } from './entities/comment-diet.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { WINSTON_MODULE_PROVIDER, WinstonLogger } from 'nest-winston';
-import { PostDiet } from '../post/entities/post-diet.entity';
 import { Repository } from 'typeorm';
+import { PostDiet } from '../post/entities/post-diet.entity';
 import { User } from '../user/entities/user.entity';
+import { CommentReturnDto } from './dto/comment-return.dto';
+import { CreateCommentDto } from './dto/create-comment.dto';
+import { UpdateCommentDietDto } from './dto/update-comment.dto';
+import { CommentDiet } from './entities/comment-diet.entity';
+import { CommentFree } from './entities/comment-free.entity';
 
 @Injectable()
 export class CommentService {
@@ -25,17 +27,20 @@ export class CommentService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async create(createCommentDto: CreateCommentDietDto) {
-    const newComment = new CommentDiet();
+  async create(createCommentDto: CreateCommentDto) {
+    const newComment =
+      createCommentDto.type === 'diet' ? new CommentDiet() : new CommentFree();
     newComment.content = createCommentDto.content;
+
     const foundUser = await this.usersRepository.findOne({
       where: { email: createCommentDto.userEmail },
     });
 
     newComment.user = foundUser;
 
+    // 레포구분하기
     const foundPost = await this.postsRepository.findOne({
-      where: { user: foundUser },
+      where: { type: createCommentDto.type, id: +createCommentDto.postId },
     });
 
     newComment.post = foundPost;
@@ -48,14 +53,18 @@ export class CommentService {
 
   async findAll() {
     const foundComments = await this.commentsDietRepository.find();
-    return foundComments;
+    return foundComments.map((foundComment) =>
+      CommentReturnDto.fromEntity(foundComment),
+    );
   }
 
   async findOne(id: number) {
     const foundComment = await this.commentsDietRepository.findOne({
       where: { id },
+      relations: ['user'],
     });
-    return foundComment;
+
+    return CommentReturnDto.fromEntity(foundComment);
   }
 
   async update(id: number, updateCommentDto: UpdateCommentDietDto) {
