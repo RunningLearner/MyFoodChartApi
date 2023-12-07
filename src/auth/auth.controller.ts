@@ -31,7 +31,7 @@ export class AuthController {
       // secure: true, 렛츠인크립트로 인증서 추가 후 적용
     });
 
-    res.redirect(`${process.env.DOMAIN}/home`);
+    res.redirect(`${process.env.DOMAIN}`);
   }
 
   @Get('status')
@@ -45,6 +45,6 @@ export class AuthController {
   @CustomLoggerDecorator()
   async logout(@Res() res) {
     res.clearCookie('access_token'); // JWT 쿠키 제거
-    res.redirect(`${process.env.DOMAIN}/home`);
+    res.redirect(`${process.env.DOMAIN}`);
   }
 }
