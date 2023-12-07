@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { UpdateUserDTO } from './dto/update-user.dto';
+import { UserReturnDto } from './dto/user-return.dto';
 import { UserDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UserService {
@@ -12,26 +14,34 @@ export class UserService {
   ) {}
 
   async create(createUserDto: UserDto) {
-    const newUser = this.usersRepository.create(createUserDto);
-    return await this.usersRepository.save(newUser);
+    const newUser = await this.usersRepository.create(createUserDto);
+    await this.usersRepository.save(newUser);
+    return UserReturnDto.fromEntity(newUser);
   }
 
   async findAll() {
-    return this.usersRepository.find();
+    const users = await this.usersRepository.find();
+    return users.map((user) => UserReturnDto.fromEntity(user));
   }
 
-  async findOne(email: string) {
-    return this.usersRepository.findOne({ where: { email } });
+  async findOne(id: number) {
+    const user = this.usersRepository.findOne({ where: { id } });
+    return UserReturnDto.fromEntity(user);
   }
 
-  async update(email: string, updateUserDto: UserDto) {
-    return this.usersRepository.update(
+  async update(email: string, updateUserDto: UpdateUserDTO) {
+    return await this.usersRepository.update(
       { email }, // 조건
-      { name: updateUserDto.name }, // 업데이트 할 내용
+      updateUserDto, // 업데이트 할 내용
     );
   }
 
   async remove(id: number) {
     return `This action removes a #${id} user`;
+  }
+
+  async findMe(email: string) {
+    const user = await this.usersRepository.findOne({ where: { email } });
+    return UserReturnDto.fromEntity(user);
   }
 }

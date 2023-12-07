@@ -1,14 +1,18 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
-import { UserService } from './user.service';
+import { JwtGuard } from '../common/gurads/jwt.guard';
+import { UpdateUserDTO } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
+import { UserService } from './user.service';
 
 @Controller('users')
 export class UserController {
@@ -24,13 +28,22 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @Get(':email')
-  findOne(@Param('email') email: string) {
-    return this.userService.findOne(email);
+  @Get(':id')
+  findOne(@Param('id') id: number) {
+    return this.userService.findOne(id);
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('aboutme')
+  findMe(@Request() req) {
+    // 인증된 유저 메일을 추가
+    const email = req.user.email;
+
+    return this.userService.findMe(email);
   }
 
   @Patch(':email')
-  update(@Param('email') email: string, @Body() updateUserDto: UserDto) {
+  update(@Param('email') email: string, @Body() updateUserDto: UpdateUserDTO) {
     return this.userService.update(email, updateUserDto);
   }
 

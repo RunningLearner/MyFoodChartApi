@@ -23,7 +23,7 @@ import * as DailyRotateFile from 'winston-daily-rotate-file';
             new DailyRotateFile({
               filename: 'logs/application-%DATE%.log',
               datePattern: 'YYYY-MM-DD',
-              zippedArchive: true,
+              zippedArchive: false,
               maxSize: '20m',
               maxFiles: '14d',
             }),

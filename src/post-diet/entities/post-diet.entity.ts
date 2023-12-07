@@ -1,15 +1,15 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  OneToMany,
-  ManyToOne,
-  UpdateDateColumn,
   CreateDateColumn,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
-import { Menu } from './menu.entity';
-import { User } from '../../user/entities/user.entity';
 import { CommentDiet } from '../../comment/entities/comment-diet.entity';
+import { User } from '../../user/entities/user.entity';
+import { Menu } from './menu.entity';
 
 @Entity()
 export class PostDiet {
@@ -55,6 +55,6 @@ export class PostDiet {
   @OneToMany(() => Menu, (menu) => menu.post, { cascade: true })
   menues: Menu[];
 
-  @ManyToOne(() => User, (user) => user.posts) // boards는 User 엔터티에서 Board 엔터티를 참조하는 필드입니다.
+  @ManyToOne(() => User, (user) => user.postsDiet) // boards는 User 엔터티에서 Board 엔터티를 참조하는 필드입니다.
   user: User;
 }

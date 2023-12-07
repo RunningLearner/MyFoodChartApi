@@ -5,7 +5,8 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PostModule } from './post/post.module';
+import { PostDietModule } from './post-diet/post-diet.module';
+import { PostFreeModule } from './post-free/post-free.module';
 import { LoggerModule } from './common/module/logger.module';
 import { CommentModule } from './comment/comment.module';
 import { RequestIdMiddleware } from './common/middlewares/request-id.middleware';
@@ -30,7 +31,8 @@ import { LogdataModule } from './logdata/logdata.module';
     LoggerModule,
     AuthModule,
     UserModule,
-    PostModule,
+    PostDietModule,
+    PostFreeModule,
     CommentModule,
     LogdataModule,
   ],

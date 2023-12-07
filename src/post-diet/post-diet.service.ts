@@ -4,23 +4,24 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CreatePostDto } from './dto/create-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Repository } from 'typeorm';
 import { Logger as WinstonLogger } from 'winston';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { PostDiet } from './entities/post-diet.entity';
-import { Menu } from './entities/menu.entity';
-import { UpdatePostDto } from './dto/update-post.dto';
-import { User } from '../user/entities/user.entity';
 import { CustomLoggerDecorator } from '../common/decorators/custom-logger.decorator';
+import { User } from '../user/entities/user.entity';
+import { CreatePostDietDto } from './dto/create-post-diet.dto';
+import { DietReturnAllDto, DietReturnDto } from './dto/diet-return.dto';
+import { UpdatePostDietDto } from './dto/update-post-diet.dto';
+import { Menu } from './entities/menu.entity';
+import { PostDiet } from './entities/post-diet.entity';
 
 @Injectable()
 export class PostDietService {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: WinstonLogger,
     @InjectRepository(PostDiet)
-    private postsRepository: Repository<PostDiet>,
+    private postsDietRepository: Repository<PostDiet>,
     @InjectRepository(Menu)
     private menuRepository: Repository<Menu>,
     @InjectRepository(User)
@@ -28,7 +29,7 @@ export class PostDietService {
   ) {}
 
   @CustomLoggerDecorator()
-  async create(createPostDto: CreatePostDto) {
+  async create(createPostDto: CreatePostDietDto) {
     const user = await this.usersRepository.findOne({
       where: { email: createPostDto.userEmail },
     });
@@ -43,9 +44,9 @@ export class PostDietService {
 
     const newPostData = { ...data, user };
 
-    const newPost = this.postsRepository.create(newPostData);
+    const newPost = this.postsDietRepository.create(newPostData);
 
-    const savedPost = await this.postsRepository.save(newPost);
+    const savedPost = await this.postsDietRepository.save(newPost);
 
     if (menues && menues.length > 0) {
       const newMenues = this.menuRepository.create(
@@ -59,30 +60,31 @@ export class PostDietService {
   }
 
   @CustomLoggerDecorator()
-  async findAll() {
-    // this.logger.info(`diet post findAll service called`);
+  async findAll(): Promise<DietReturnAllDto[]> {
+    const result = await this.postsDietRepository.find({
+      relations: ['user', 'menues'],
+    });
 
-    return await this.postsRepository.find();
+    return result.map((post) => DietReturnAllDto.fromEntity(post));
   }
 
   @CustomLoggerDecorator()
-  async findOne(id: number) {
-    // this.logger.info(`diet post findOne service called`);
-
-    const foundPost = await this.postsRepository.findOne({
+  async findOne(id: number): Promise<DietReturnDto> {
+    const foundPost = await this.postsDietRepository.findOne({
       where: { id },
+      relations: ['user', 'menues'],
     });
 
     if (!foundPost) {
       throw new NotFoundException(`Post with id ${id} not found`);
     }
 
-    return foundPost;
+    return DietReturnDto.fromEntity(foundPost);
   }
 
   @CustomLoggerDecorator()
-  async update(postId: number, updatePostDto: UpdatePostDto) {
-    const foundPost = await this.postsRepository.findOne({
+  async update(postId: number, updatePostDto: UpdatePostDietDto) {
+    const foundPost = await this.postsDietRepository.findOne({
       where: { id: postId },
       relations: ['user'],
     });
@@ -101,7 +103,7 @@ export class PostDietService {
     // 객체를 덮어씌우기
     Object.assign(foundPost, data);
 
-    const savedPost = await this.postsRepository.save(foundPost);
+    const savedPost = await this.postsDietRepository.save(foundPost);
 
     if (menues && menues.length > 0) {
       // 연결된 모든 메뉴 제거
@@ -120,18 +122,12 @@ export class PostDietService {
       await this.menuRepository.save(newMenues);
     }
 
-    if (savedPost) {
-      // this.logger.info(
-      //   `post update service succeed. res:${JSON.stringify(savedPost)}`,
-      // );
-    }
-
     return savedPost;
   }
 
   @CustomLoggerDecorator()
   async remove(id: number, userEmail: string) {
-    const foundPost = await this.postsRepository.findOne({
+    const foundPost = await this.postsDietRepository.findOne({
       where: { id },
       relations: ['user'],
     });
@@ -144,7 +140,7 @@ export class PostDietService {
       throw new UnauthorizedException(`게시글을 수정할 권한이 없습니다.`);
     }
 
-    await this.postsRepository.remove(foundPost);
+    await this.postsDietRepository.remove(foundPost);
 
     return `게시글 ID ${id}가 삭제되었습니다.`;
   }
