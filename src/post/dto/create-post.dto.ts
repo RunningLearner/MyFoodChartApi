@@ -1,7 +1,7 @@
-import { IsString, IsArray } from 'class-validator';
+import { IsArray, IsString } from 'class-validator';
 import { CreateMenuDTO } from './create-menu.dto';
 
-export class CreatePostDto {
+export class CreatePostDietDto {
   @IsString()
   userEmail: string;
 

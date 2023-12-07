@@ -1,26 +1,26 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  UseGuards,
+  Get,
   Inject,
-  UseInterceptors,
+  Param,
+  Patch,
+  Post,
   Request,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
-import { PostServiceFactory } from './post-service.factory';
-import { JwtGuard } from '../common/gurads/jwt.guard';
-import { Logger as WinstonLogger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { CreatePostDto } from './dto/create-post.dto';
-import { FileInterceptor } from '../common/interceptors/file.interceptor';
-import { UpdatePostDto } from './dto/update-post.dto';
+import { Logger as WinstonLogger } from 'winston';
 import { CustomLoggerDecorator } from '../common/decorators/custom-logger.decorator';
 import { Roles } from '../common/decorators/roles.decorator';
+import { JwtGuard } from '../common/gurads/jwt.guard';
 import { RolesGuard } from '../common/gurads/roles.guard';
+import { FileInterceptor } from '../common/interceptors/file.interceptor';
+import { CreatePostDietDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
+import { PostServiceFactory } from './post-service.factory';
 
 @Controller('posts')
 export class PostsController {
@@ -36,7 +36,7 @@ export class PostsController {
   @CustomLoggerDecorator()
   create(
     @Param('type') type: string,
-    @Body() creatPostDto: CreatePostDto,
+    @Body() creatPostDto: CreatePostDietDto,
     @Request() req,
   ) {
     // 인증된 유저 메일을 추가
@@ -49,7 +49,6 @@ export class PostsController {
   @Get(':type')
   @CustomLoggerDecorator()
   findAll(@Param('type') type: string) {
-    this.logger.info(`게시글 조회 컨르롤러 호출됨.`);
     const boardService = this.boardServiceFactory.getService(type);
     return boardService.findAll();
   }

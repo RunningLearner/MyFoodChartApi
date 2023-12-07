@@ -4,16 +4,17 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CreatePostDto } from './dto/create-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Repository } from 'typeorm';
 import { Logger as WinstonLogger } from 'winston';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { PostDiet } from './entities/post-diet.entity';
-import { Menu } from './entities/menu.entity';
-import { UpdatePostDto } from './dto/update-post.dto';
-import { User } from '../user/entities/user.entity';
 import { CustomLoggerDecorator } from '../common/decorators/custom-logger.decorator';
+import { User } from '../user/entities/user.entity';
+import { CreatePostDietDto } from './dto/create-post.dto';
+import { DietReturnAllDto, DietReturnDto } from './dto/diet-return.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
+import { Menu } from './entities/menu.entity';
+import { PostDiet } from './entities/post-diet.entity';
 
 @Injectable()
 export class PostDietService {
@@ -28,7 +29,7 @@ export class PostDietService {
   ) {}
 
   @CustomLoggerDecorator()
-  async create(createPostDto: CreatePostDto) {
+  async create(createPostDto: CreatePostDietDto) {
     const user = await this.usersRepository.findOne({
       where: { email: createPostDto.userEmail },
     });
@@ -59,25 +60,26 @@ export class PostDietService {
   }
 
   @CustomLoggerDecorator()
-  async findAll() {
-    // this.logger.info(`diet post findAll service called`);
+  async findAll(): Promise<DietReturnAllDto[]> {
+    const result = await this.postsRepository.find({
+      relations: ['user', 'menues'],
+    });
 
-    return await this.postsRepository.find();
+    return result.map((post) => DietReturnAllDto.fromEntity(post));
   }
 
   @CustomLoggerDecorator()
-  async findOne(id: number) {
-    // this.logger.info(`diet post findOne service called`);
-
+  async findOne(id: number): Promise<DietReturnDto> {
     const foundPost = await this.postsRepository.findOne({
       where: { id },
+      relations: ['user', 'menues'],
     });
 
     if (!foundPost) {
       throw new NotFoundException(`Post with id ${id} not found`);
     }
 
-    return foundPost;
+    return DietReturnDto.fromEntity(foundPost);
   }
 
   @CustomLoggerDecorator()
