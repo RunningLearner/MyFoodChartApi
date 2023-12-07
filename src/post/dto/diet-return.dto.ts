@@ -1,3 +1,5 @@
+import { UserReturnDto } from '../../user/dto/user-return.dto';
+
 export class DietReturnAllDto {
   id: string;
   createdAt: string;
@@ -5,9 +7,13 @@ export class DietReturnAllDto {
   recipeImg: string;
   whichSchool: string;
   menues: MenuReturnDto[];
-  user: UserReturnDto;
+  // 사용자의 고유아이디는 불필요
+  user: Omit<UserReturnDto, 'id'>;
 
   static fromEntity(post: any): DietReturnAllDto {
+    const userDto = UserReturnDto.fromEntity(post.user);
+    const { id, ...userWithoutId } = userDto;
+
     return {
       id: post.id,
       createdAt: post.createdAt,
@@ -15,7 +21,7 @@ export class DietReturnAllDto {
       recipeImg: post.recipeImg,
       whichSchool: post.whichSchool,
       menues: post.menues.map(MenuReturnDto.fromEntity),
-      user: UserReturnDto.fromEntity(post.user),
+      user: userWithoutId,
     };
   }
 }
@@ -31,9 +37,13 @@ export class DietReturnDto {
   recipeImg: string;
   whichSchool: string;
   menues: MenuReturnDto[];
-  user: UserReturnDto;
+  // 사용자의 고유아이디는 불필요
+  user: Omit<UserReturnDto, 'id'>;
 
   static fromEntity(post: any): DietReturnDto {
+    const userDto = UserReturnDto.fromEntity(post.user);
+    const { id, ...userWithoutId } = userDto;
+
     return {
       id: post.id,
       createdAt: post.createdAt,
@@ -45,7 +55,7 @@ export class DietReturnDto {
       recipeImg: post.recipeImg,
       whichSchool: post.whichSchool,
       menues: post.menues.map(MenuReturnDto.fromEntity),
-      user: UserReturnDto.fromEntity(post.user),
+      user: userWithoutId,
     };
   }
 }
@@ -64,20 +74,6 @@ export class MenuReturnDto {
       isProductUsed: menu.isProductUsed,
       productName: menu.productName,
       productBrand: menu.productBrand,
-    };
-  }
-}
-
-export class UserReturnDto {
-  email: string;
-  name: string;
-  isNutritionist: boolean;
-
-  static fromEntity(user: any): UserReturnDto {
-    return {
-      email: user.email,
-      name: user.name,
-      isNutritionist: user.isNutritionist,
     };
   }
 }
