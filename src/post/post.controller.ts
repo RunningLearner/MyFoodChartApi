@@ -18,8 +18,8 @@ import { Roles } from '../common/decorators/roles.decorator';
 import { JwtGuard } from '../common/gurads/jwt.guard';
 import { RolesGuard } from '../common/gurads/roles.guard';
 import { FileInterceptor } from '../common/interceptors/file.interceptor';
-import { CreatePostDietDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
+import { CreatePostDietDto } from './dto/create-post-diet.dto';
+import { UpdatePostDto } from './dto/update-post-diet.dto';
 import { PostServiceFactory } from './post-service.factory';
 
 @Controller('posts')
