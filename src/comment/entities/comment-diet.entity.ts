@@ -1,13 +1,13 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
-  UpdateDateColumn,
   CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
-import { User } from '../../user/entities/user.entity';
 import { PostDiet } from '../../post/entities/post-diet.entity';
+import { User } from '../../user/entities/user.entity';
 
 @Entity()
 export class CommentDiet {
@@ -26,6 +26,6 @@ export class CommentDiet {
   @ManyToOne(() => PostDiet, (post) => post.comments)
   post: PostDiet;
 
-  @ManyToOne(() => User, (user) => user.posts)
+  @ManyToOne(() => User, (user) => user.postsDiet)
   user: User;
 }
