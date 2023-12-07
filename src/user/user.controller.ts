@@ -1,17 +1,18 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  UseGuards,
+  Get,
+  Param,
+  Patch,
+  Post,
   Request,
+  UseGuards,
 } from '@nestjs/common';
-import { UserService } from './user.service';
+import { JwtGuard } from '../common/gurads/jwt.guard';
+import { UpdateUserDTO } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
-import { JwtGuard } from 'src/common/gurads/jwt.guard';
+import { UserService } from './user.service';
 
 @Controller('users')
 export class UserController {
@@ -42,7 +43,7 @@ export class UserController {
   }
 
   @Patch(':email')
-  update(@Param('email') email: string, @Body() updateUserDto: UserDto) {
+  update(@Param('email') email: string, @Body() updateUserDto: UpdateUserDTO) {
     return this.userService.update(email, updateUserDto);
   }
 
