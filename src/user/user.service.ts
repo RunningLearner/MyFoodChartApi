@@ -25,15 +25,12 @@ export class UserService {
   }
 
   async findOne(id: number) {
-    const user = this.usersRepository.findOne({ where: { id } });
+    const user = await this.usersRepository.findOne({ where: { id } });
     return UserReturnDto.fromEntity(user);
   }
 
-  async update(email: string, updateUserDto: UpdateUserDTO) {
-    return await this.usersRepository.update(
-      { email }, // 조건
-      updateUserDto, // 업데이트 할 내용
-    );
+  async updateNickname(email: string, updateUserDto: UpdateUserDTO) {
+    return await this.usersRepository.update({ email }, updateUserDto);
   }
 
   async remove(id: number) {

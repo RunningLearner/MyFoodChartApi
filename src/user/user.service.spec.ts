@@ -77,7 +77,7 @@ describe('UserService', () => {
       mockRepository.update.mockReturnValue(Promise.resolve());
 
       // Execute
-      await service.update('test@email.com', userDto);
+      await service.updateNickname('test@email.com', userDto);
 
       // Validate
       expect(mockRepository.update).toHaveBeenCalledWith(

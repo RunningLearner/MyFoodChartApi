@@ -34,11 +34,7 @@ export class PostsController {
   @UseInterceptors(FileInterceptor)
   @Post('diet')
   @CustomLoggerDecorator()
-  create(
-    @Param('type') type: string,
-    @Body() creatPostDto: CreatePostDietDto,
-    @Request() req,
-  ) {
+  create(@Body() creatPostDto: CreatePostDietDto, @Request() req) {
     // 인증된 유저 메일을 추가
     creatPostDto.userEmail = req.user.email;
 
@@ -47,23 +43,22 @@ export class PostsController {
 
   @Get('diet')
   @CustomLoggerDecorator()
-  findAll(@Param('type') type: string) {
+  findAll() {
     return this.postDietService.findAll();
   }
 
   @Get('diet/:id')
   @CustomLoggerDecorator()
-  findOne(@Param('type') type: string, @Param('id') id: string) {
+  findOne(@Param('id') id: string) {
     return this.postDietService.findOne(+id);
   }
 
   @UseGuards(JwtGuard, RolesGuard)
   @Roles('user', 'admin')
   @UseInterceptors(FileInterceptor)
-  @Patch(':type/:id')
+  @Patch('diet/:id')
   @CustomLoggerDecorator()
   update(
-    @Param('type') type: string,
     @Param('id') id: string,
     @Body() updatePostDto: UpdatePostDietDto,
     @Request() req,
@@ -75,9 +70,9 @@ export class PostsController {
 
   @UseGuards(JwtGuard, RolesGuard)
   @Roles('user', 'admin')
-  @Delete(':type/:id')
+  @Delete('diet/:id')
   @CustomLoggerDecorator()
-  remove(@Param('type') type: string, @Param('id') id: string, @Request() req) {
+  remove(@Param('id') id: string, @Request() req) {
     return this.postDietService.remove(+id, req.user.email);
   }
 }

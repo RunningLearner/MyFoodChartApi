@@ -20,6 +20,9 @@ export class User {
   @Column({ type: 'text', nullable: true })
   name: string;
 
+  @Column({ type: 'text', nullable: true })
+  nickname: string;
+
   @Column({ type: 'boolean', default: false })
   isNutritionist: boolean;
 

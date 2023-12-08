@@ -1,3 +1,5 @@
+docker-compose.*
+data
 # Logs
 logs
 *.log
