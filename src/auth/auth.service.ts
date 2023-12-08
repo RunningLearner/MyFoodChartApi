@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from '../user/user.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/user/entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userService: UserService,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -14,12 +17,15 @@ export class AuthService {
     const email = req.user.email;
 
     // 1. 회원조회
-    let user = await this.userService.findOne(email); //user를 찾아서
+    let user = await this.userRepository.findOne({ where: { email } }); //user를 찾아서
 
     // 2, 회원가입이 안되어있다면?
     if (!user) {
       //user가 없으면 하나 만들고, 있으면 이 if문에 들어오지 않을거기때문에 이러나 저러나 user는 존재하는게 됨.
-      user = await this.userService.create({ ...req.user });
+      user = await this.userRepository.create({
+        name: req.user.name,
+        email: req.user.email,
+      });
     }
 
     // 3. 회원가입이 되었다면? 로그인(AT를 생성해서 브라우저에 전송)한다
