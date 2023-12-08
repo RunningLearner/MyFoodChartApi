@@ -24,7 +24,7 @@ export function CustomLoggerDecorator(): MethodDecorator {
         const reqIndex = args.findIndex(
           (arg) => arg && typeof arg === 'object' && 'body' in arg,
         );
-        methodArgs = reqIndex >= 0 ? args[reqIndex].body : args;
+        methodArgs = reqIndex >= 0 ? args[reqIndex].body : '';
       } else {
         methodArgs = args;
       }

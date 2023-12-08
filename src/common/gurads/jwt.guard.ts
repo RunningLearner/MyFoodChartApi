@@ -23,8 +23,8 @@ export class JwtGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const authHeader = request.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
+    const authHeader = request.headers['cookie'];
+    const token = authHeader && authHeader.split('=')[1];
 
     if (!token) {
       throw new UnauthorizedException('토큰이 존재하지 않습니다.');
