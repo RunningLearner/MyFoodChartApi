@@ -27,6 +27,15 @@ export class UserController {
     return this.userService.findMe(email);
   }
 
+  @UseGuards(JwtGuard)
+  @Patch('nickname')
+  updateNickname(@Request() req, @Body() updateUserDto: UpdateUserDTO) {
+    // 인증된 유저 메일을 추가
+    const email = req.user.email;
+
+    return this.userService.updateNickname(email, updateUserDto);
+  }
+
   @Post()
   create(@Body() createUserDto: UserDto) {
     return this.userService.create(createUserDto);
@@ -40,15 +49,6 @@ export class UserController {
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.userService.findOne(+id);
-  }
-
-  @UseGuards(JwtGuard)
-  @Patch()
-  updateNickname(@Request() req, @Body() updateUserDto: UpdateUserDTO) {
-    // 인증된 유저 메일을 추가
-    const email = req.user.email;
-
-    return this.userService.updateNickname(email, updateUserDto);
   }
 
   @Delete(':id')
