@@ -29,11 +29,8 @@ export class UserService {
     return UserReturnDto.fromEntity(user);
   }
 
-  async update(email: string, updateUserDto: UpdateUserDTO) {
-    return await this.usersRepository.update(
-      { email }, // 조건
-      updateUserDto, // 업데이트 할 내용
-    );
+  async updateNickname(email: string, updateUserDto: UpdateUserDTO) {
+    return await this.usersRepository.update({ email }, updateUserDto);
   }
 
   async remove(id: number) {

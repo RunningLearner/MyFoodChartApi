@@ -21,7 +21,6 @@ export class UserController {
   @UseGuards(JwtGuard)
   @Get('aboutme')
   findMe(@Request() req) {
-    console.log('usersController');
     // 인증된 유저 메일을 추가
     const email = req.user.email;
 
@@ -43,9 +42,13 @@ export class UserController {
     return this.userService.findOne(+id);
   }
 
-  @Patch(':email')
-  update(@Param('email') email: string, @Body() updateUserDto: UpdateUserDTO) {
-    return this.userService.update(email, updateUserDto);
+  @UseGuards(JwtGuard)
+  @Patch()
+  updateNickname(@Request() req, @Body() updateUserDto: UpdateUserDTO) {
+    // 인증된 유저 메일을 추가
+    const email = req.user.email;
+
+    return this.userService.updateNickname(email, updateUserDto);
   }
 
   @Delete(':id')
