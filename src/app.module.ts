@@ -1,16 +1,16 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { PostDietModule } from './post-diet/post-diet.module';
-import { PostFreeModule } from './post-free/post-free.module';
-import { LoggerModule } from './common/module/logger.module';
 import { CommentModule } from './comment/comment.module';
 import { RequestIdMiddleware } from './common/middlewares/request-id.middleware';
+import { LoggerModule } from './common/module/logger.module';
 import { LogdataModule } from './logdata/logdata.module';
+import { PostDietModule } from './post-diet/post-diet.module';
+import { PostFreeModule } from './post-free/post-free.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [

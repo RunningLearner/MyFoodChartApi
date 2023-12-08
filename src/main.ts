@@ -1,9 +1,9 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { NestFactory } from '@nestjs/core';
 import * as cookieParser from 'cookie-parser';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { AppModule } from './app.module';
+import { GlobalExceptionFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -18,7 +18,7 @@ async function bootstrap() {
     }),
   );
 
-  app.useGlobalFilters(new HttpExceptionFilter(winstonLogger));
+  app.useGlobalFilters(new GlobalExceptionFilter(winstonLogger));
 
   const port = process.env.PORT || 5000;
 

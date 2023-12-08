@@ -25,7 +25,7 @@ export class UserService {
   }
 
   async findOne(id: number) {
-    const user = this.usersRepository.findOne({ where: { id } });
+    const user = await this.usersRepository.findOne({ where: { id } });
     return UserReturnDto.fromEntity(user);
   }
 

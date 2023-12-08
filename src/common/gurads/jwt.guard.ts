@@ -1,17 +1,17 @@
 import {
-  Injectable,
   CanActivate,
   ExecutionContext,
   Inject,
+  Injectable,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import * as jwt from 'jsonwebtoken';
-import { Logger as WinstonLogger } from 'winston';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../../user/entities/user.entity';
+import * as jwt from 'jsonwebtoken';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Repository } from 'typeorm';
+import { Logger as WinstonLogger } from 'winston';
+import { User } from '../../user/entities/user.entity';
 
 @Injectable()
 export class JwtGuard implements CanActivate {

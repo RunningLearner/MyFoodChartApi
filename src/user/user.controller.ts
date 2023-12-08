@@ -9,7 +9,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { JwtGuard } from '../common/gurads/jwt.guard';
+import { JwtGuard } from 'src/common/gurads/jwt.guard';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
 import { UserService } from './user.service';
@@ -17,6 +17,16 @@ import { UserService } from './user.service';
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @UseGuards(JwtGuard)
+  @Get('aboutme')
+  findMe(@Request() req) {
+    console.log('usersController');
+    // 인증된 유저 메일을 추가
+    const email = req.user.email;
+
+    return this.userService.findMe(email);
+  }
 
   @Post()
   create(@Body() createUserDto: UserDto) {
@@ -30,16 +40,7 @@ export class UserController {
 
   @Get(':id')
   findOne(@Param('id') id: number) {
-    return this.userService.findOne(id);
-  }
-
-  @UseGuards(JwtGuard)
-  @Get('aboutme')
-  findMe(@Request() req) {
-    // 인증된 유저 메일을 추가
-    const email = req.user.email;
-
-    return this.userService.findMe(email);
+    return this.userService.findOne(+id);
   }
 
   @Patch(':email')
