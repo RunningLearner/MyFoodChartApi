@@ -27,6 +27,7 @@
 ![image](https://github.com/RunningLearner/RecipeSoupApi/assets/97277365/81015212-f962-44d6-885e-5a0bad5550c0)
 
 ## ERD
+![image](https://github.com/RunningLearner/RecipeSoupApi/assets/97277365/c6e45c6d-ae96-4849-bff2-6306993bbb9f)
 
 ## 모니터링(개발 중)
 ![image](https://github.com/RunningLearner/RecipeSoupApi/assets/97277365/8c0ad55f-b6e6-4f8c-a709-43dd6c2eec4e)
