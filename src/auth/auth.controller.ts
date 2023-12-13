@@ -1,8 +1,8 @@
-import { Controller, Get, UseGuards, Req, Res, Inject } from '@nestjs/common';
+import { Controller, Get, Inject, Req, Res, UseGuards } from '@nestjs/common';
+import { WINSTON_MODULE_PROVIDER, WinstonLogger } from 'nest-winston';
+import { CustomLoggerDecorator } from 'src/common/decorators/custom-logger.decorator';
 import { AuthService } from './auth.service';
 import { NaverAuthGuard } from './gurads/naver-auth.guard';
-import { CustomLoggerDecorator } from 'src/common/decorators/custom-logger.decorator';
-import { WINSTON_MODULE_PROVIDER, WinstonLogger } from 'nest-winston';
 
 @Controller('auth')
 export class AuthController {
@@ -28,7 +28,8 @@ export class AuthController {
     // cookie 메서드를 사용할 수 있습니다.
     res.cookie('access_token', accessToken, {
       httpOnly: true,
-      // secure: true, 렛츠인크립트로 인증서 추가 후 적용
+      // let's encrypt로 인증서 추가 후 적용
+      secure: true,
     });
 
     res.redirect(`${process.env.DOMAIN}`);
@@ -45,6 +46,5 @@ export class AuthController {
   @CustomLoggerDecorator()
   async logout(@Res() res) {
     res.clearCookie('access_token'); // JWT 쿠키 제거
-    res.redirect(`${process.env.DOMAIN}`);
   }
 }
