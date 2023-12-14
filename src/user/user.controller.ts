@@ -28,12 +28,12 @@ export class UserController {
   }
 
   @UseGuards(JwtGuard)
-  @Patch('nickname')
-  updateNickname(@Request() req, @Body() updateUserDto: UpdateUserDTO) {
+  @Patch(':id')
+  update(@Request() req, @Body() updateUserDto: UpdateUserDTO) {
     // 인증된 유저 메일을 추가
     const email = req.user.email;
 
-    return this.userService.updateNickname(email, updateUserDto);
+    return this.userService.update(email, updateUserDto);
   }
 
   @Post()
@@ -41,14 +41,14 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
-  }
-
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.userService.findOne(+id);
+  }
+
+  @Get()
+  findAll() {
+    return this.userService.findAll();
   }
 
   @Delete(':id')

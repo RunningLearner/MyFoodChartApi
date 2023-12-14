@@ -1,9 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserService } from './user.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
 import { UserDto } from './dto/user.dto';
-import { FindOneOptions } from 'typeorm';
+import { User } from './entities/user.entity';
+import { UserService } from './user.service';
 
 describe('UserService', () => {
   let service: UserService;
@@ -77,7 +76,7 @@ describe('UserService', () => {
       mockRepository.update.mockReturnValue(Promise.resolve());
 
       // Execute
-      await service.updateNickname('test@email.com', userDto);
+      await service.update('test@email.com', userDto);
 
       // Validate
       expect(mockRepository.update).toHaveBeenCalledWith(
