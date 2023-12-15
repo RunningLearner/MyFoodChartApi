@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Request,
   UseGuards,
   UseInterceptors,
@@ -39,6 +40,15 @@ export class PostsController {
     creatPostDto.userEmail = req.user.email;
 
     return this.postDietService.create(creatPostDto);
+  }
+
+  @Get('diet/search')
+  search(
+    @Query('institue') institue: string,
+    @Query('keyword') keyword: string,
+    // TODO : 정렬 구현 @Query('orderBy') orderBy: string,
+  ) {
+    return this.postDietService.search(institue, keyword);
   }
 
   @Get('diet')

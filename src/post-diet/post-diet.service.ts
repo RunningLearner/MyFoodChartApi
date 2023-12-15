@@ -29,6 +29,15 @@ export class PostDietService {
   ) {}
 
   @CustomLoggerDecorator()
+  async search(institue: string, keyword: string) {
+    const result = await this.postsDietRepository.find({
+      relations: ['user', 'menues'],
+    });
+
+    return result.map((post) => DietReturnAllDto.fromEntity(post));
+  }
+
+  @CustomLoggerDecorator()
   async create(createPostDto: CreatePostDietDto) {
     const user = await this.usersRepository.findOne({
       where: { email: createPostDto.userEmail },
