@@ -29,10 +29,14 @@ export class PostDietService {
   ) {}
 
   @CustomLoggerDecorator()
-  async search(institue: string, keyword: string) {
-    const result = await this.postsDietRepository.find({
-      relations: ['user', 'menues'],
-    });
+  async search(institute: string, keyword: string) {
+    const result = await this.postsDietRepository
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.menues', 'menu')
+      .leftJoinAndSelect('post.user', 'user')
+      .where('post.institute = :institute', { institute })
+      .andWhere('menu.menuName LIKE :keyword', { keyword: `%${keyword}%` })
+      .getMany();
 
     return result.map((post) => DietReturnAllDto.fromEntity(post));
   }
