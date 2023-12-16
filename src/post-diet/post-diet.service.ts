@@ -29,6 +29,19 @@ export class PostDietService {
   ) {}
 
   @CustomLoggerDecorator()
+  async search(institute: string, keyword: string) {
+    const result = await this.postsDietRepository
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.menues', 'menu')
+      .leftJoinAndSelect('post.user', 'user')
+      .where('post.institute = :institute', { institute })
+      .andWhere('menu.menuName LIKE :keyword', { keyword: `%${keyword}%` })
+      .getMany();
+
+    return result.map((post) => DietReturnAllDto.fromEntity(post));
+  }
+
+  @CustomLoggerDecorator()
   async create(createPostDto: CreatePostDietDto) {
     const user = await this.usersRepository.findOne({
       where: { email: createPostDto.userEmail },

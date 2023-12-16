@@ -29,7 +29,7 @@ export class UserService {
     return UserReturnDto.fromEntity(user);
   }
 
-  async updateNickname(email: string, updateUserDto: UpdateUserDTO) {
+  async update(email: string, updateUserDto: UpdateUserDTO) {
     return await this.usersRepository.update({ email }, updateUserDto);
   }
 
