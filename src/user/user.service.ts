@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { UserReturnDto } from './dto/user-return.dto';
 import { UserDto } from './dto/user.dto';
-import { User } from './entities/user.entity';
+import { User, UserRole } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
@@ -34,7 +34,7 @@ export class UserService {
   }
 
   async remove(id: number) {
-    return `This action removes a #${id} user`;
+    return await this.usersRepository.update({ id }, { role: UserRole.EXUSER });
   }
 
   async findMe(email: string) {

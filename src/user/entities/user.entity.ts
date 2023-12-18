@@ -7,6 +7,7 @@ import { PostFree } from '../../post-free/entities/post-free.entity';
 export enum UserRole {
   ADMIN = 'admin',
   USER = 'user',
+  EXUSER = 'exuser',
 }
 
 @Entity()
@@ -44,7 +45,4 @@ export class User {
     default: UserRole.USER,
   })
   role: UserRole;
-
-  @Column({ type: 'boolean', nullable: true })
-  isDeleted: boolean;
 }
