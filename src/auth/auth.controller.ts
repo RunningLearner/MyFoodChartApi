@@ -46,6 +46,6 @@ export class AuthController {
   @CustomLoggerDecorator()
   async logout(@Res() res) {
     res.clearCookie('access_token', { domain: 'recipesoup.site', path: '/' }); // JWT 쿠키 제거
-    res.redirect('/login');
+    res.redirect('/');
   }
 }
