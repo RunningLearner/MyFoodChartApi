@@ -50,6 +50,6 @@ export class AuthController {
       httpOnly: true,
     }); // JWT 쿠키 제거
 
-    res.redirect('/');
+    res.redirect('${process.env.DOMAIN}');
   }
 }
