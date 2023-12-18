@@ -50,6 +50,6 @@ export class AuthController {
       httpOnly: true,
     }); // JWT 쿠키 제거
 
-    res.redirect(`${process.env.DOMAIN}`);
+    res.status(204).send(); // 204 No Content 응답 반환
   }
 }
