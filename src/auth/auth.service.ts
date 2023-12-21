@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AuthService {
@@ -23,7 +24,7 @@ export class AuthService {
     if (!user) {
       //user가 없으면 하나 만들고, 있으면 이 if문에 들어오지 않을거기때문에 이러나 저러나 user는 존재하는게 됨.
       user = this.userRepository.create({
-        nickname: req.user.nickname,
+        nickname: await this.generateRandomNickname(),
         email: req.user.email,
       });
       await this.userRepository.save(user);
@@ -37,5 +38,22 @@ export class AuthService {
     });
 
     return accessToken;
+  }
+
+  private async generateRandomNickname(): Promise<string> {
+    let randomNickname;
+    let isUnique = false;
+
+    while (!isUnique) {
+      randomNickname = uuidv4().substring(0, 8); // UUID의 처음 8자리를 사용하여 닉네임 생성
+
+      // 닉네임의 고유성 검사
+      const existingUser = await this.userRepository.findOne({
+        where: { nickname: randomNickname },
+      });
+      isUnique = !existingUser;
+    }
+
+    return randomNickname; // 중복되지 않는 고유한 닉네임 반환
   }
 }
