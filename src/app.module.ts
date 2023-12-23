@@ -11,6 +11,7 @@ import { LogdataModule } from './logdata/logdata.module';
 import { PostDietModule } from './post-diet/post-diet.module';
 import { PostFreeModule } from './post-free/post-free.module';
 import { UserModule } from './user/user.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { UserModule } from './user/user.module';
     PostFreeModule,
     CommentModule,
     LogdataModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService],
