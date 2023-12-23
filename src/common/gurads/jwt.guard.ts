@@ -46,6 +46,7 @@ export class JwtGuard implements CanActivate {
       if (!request.user) request.user = {};
       request.user.email = user.email;
       request.user.role = user.role;
+      request.user.id = user.id;
 
       return true;
     } catch (e) {
