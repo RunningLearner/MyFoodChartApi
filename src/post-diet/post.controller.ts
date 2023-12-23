@@ -37,9 +37,9 @@ export class PostsController {
   @CustomLoggerDecorator()
   create(@Body() creatPostDto: CreatePostDietDto, @Request() req) {
     // 인증된 유저 메일을 추가
-    creatPostDto.userEmail = req.user.email;
-
-    return this.postDietService.create(creatPostDto);
+    const userEmail = req.user.email;
+    console.log(creatPostDto);
+    return this.postDietService.create(userEmail, creatPostDto);
   }
 
   @Get('diet/search')
