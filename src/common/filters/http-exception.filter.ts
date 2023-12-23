@@ -26,8 +26,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       // HttpException 처리
       const status = exception.getStatus();
       this.logger.error(
-        `HTTP 예외 발생: ${exception.message}`,
-        exception.stack,
+        `HTTP 예외 발생: ${exception.message} ${exception.stack}`,
       );
       response.status(status).json({
         statusCode: status,
@@ -36,8 +35,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     } else if (exception instanceof QueryFailedError) {
       // QueryFailedError 처리
       this.logger.error(
-        `데이터베이스 쿼리 실패: ${exception.message}`,
-        exception.stack,
+        `데이터베이스 쿼리 실패: ${exception.message} ${exception.stack}`,
       );
       response.status(500).json({
         statusCode: 500,
@@ -46,7 +44,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     } else if (exception instanceof Error) {
       // 그 외 일반 예외 처리
       message = exception.message;
-      this.logger.error(`일반 예외 발생: ${message}`, exception.stack);
+      this.logger.error(`일반 예외 발생: ${message} ${exception.stack}`);
       response.status(500).json({
         statusCode: 500,
         message: '서버에 오류가 발생했습니다.',
