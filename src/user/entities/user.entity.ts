@@ -19,6 +19,9 @@ export class User {
   email: string;
 
   @Column({ type: 'text', nullable: true })
+  userImg: string;
+
+  @Column({ type: 'text', nullable: true })
   name: string;
 
   @Column({ type: 'text', nullable: true })

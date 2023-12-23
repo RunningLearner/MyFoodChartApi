@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,6 +10,7 @@ import { UpdateUserDTO } from './dto/update-user.dto';
 import { UserReturnDto } from './dto/user-return.dto';
 import { UserDto } from './dto/user.dto';
 import { User, UserRole } from './entities/user.entity';
+import { UpdateUserPhotoDTO } from './dto/update-user-photo.dto';
 
 @Injectable()
 export class UserService {
@@ -44,6 +46,25 @@ export class UserService {
     } else {
       throw new BadRequestException('중복된 닉네임입니다.');
     }
+  }
+
+  async updatePhoto(email: string, updateUserPhotoDto: UpdateUserPhotoDTO) {
+    const user = await this.usersRepository.findOne({ where: { email } });
+
+    if (!user) {
+      throw new NotFoundException('해당 사용자를 찾을 수 없습니다.');
+    }
+
+    const updateResult = await this.usersRepository.update(
+      { email },
+      updateUserPhotoDto,
+    );
+
+    if (updateResult.affected === 0) {
+      throw new InternalServerErrorException('사진 업데이트에 실패했습니다.');
+    }
+
+    return updateResult;
   }
 
   private async isNicknameUnique(
