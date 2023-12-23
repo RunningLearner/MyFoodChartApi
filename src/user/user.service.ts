@@ -1,11 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { UserReturnDto } from './dto/user-return.dto';
 import { UserDto } from './dto/user.dto';
 import { User, UserRole } from './entities/user.entity';
-import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class UserService {
@@ -39,7 +42,7 @@ export class UserService {
     if (await this.isNicknameUnique(updateUserDto.nickname, user.id)) {
       return await this.usersRepository.update({ email }, updateUserDto);
     } else {
-      throw new Error('중복된 닉네임입니다.');
+      throw new BadRequestException('중복된 닉네임입니다.');
     }
   }
 
