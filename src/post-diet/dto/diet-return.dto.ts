@@ -2,6 +2,7 @@ import { UserReturnDto } from '../../user/dto/user-return.dto';
 
 export class DietReturnAllDto {
   id: string;
+  date: string;
   createdAt: string;
   institute: string;
   recipeImg: string;
@@ -16,6 +17,7 @@ export class DietReturnAllDto {
 
     return {
       id: post.id,
+      date: post.date,
       createdAt: post.createdAt,
       institute: post.institute,
       recipeImg: post.recipeImg,
@@ -29,6 +31,7 @@ export class DietReturnAllDto {
 export class DietReturnDto {
   id: string;
   createdAt: string;
+  date: string;
   institute: string;
   peopleNum: string;
   price: string;
@@ -46,6 +49,7 @@ export class DietReturnDto {
 
     return {
       id: post.id,
+      date: post.date,
       createdAt: post.createdAt,
       institute: post.institute,
       peopleNum: post.peopleNum,
