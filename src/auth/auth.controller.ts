@@ -35,13 +35,6 @@ export class AuthController {
     res.redirect(`${process.env.DOMAIN}`);
   }
 
-  @Get('status')
-  @CustomLoggerDecorator()
-  async status(@Req() req, @Res() res) {
-    const loginStatus: boolean = req.cookies['access_token'] ? true : false;
-    res.json({ isLogIn: loginStatus });
-  }
-
   @Get('logout')
   @CustomLoggerDecorator()
   async logout(@Res() res) {
