@@ -21,10 +21,16 @@ export class FileInterceptor implements NestInterceptor {
     const storage = multer.diskStorage({
       destination: (req, file, cb) => {
         let folder = 'uploads/';
-        if (file.fieldname === 'recipeImg') {
-          folder += 'images/';
-        } else if (file.fieldname === 'recipeFile') {
-          folder += 'files/';
+        switch (file.fieldname) {
+          case 'recipeImg':
+            folder += 'images/diets/';
+            break;
+          case 'recipeFile':
+            folder += 'files/';
+            break;
+          case 'userImg':
+            folder += 'images/users/';
+            break;
         }
 
         if (!fs.existsSync(folder)) {
@@ -45,6 +51,7 @@ export class FileInterceptor implements NestInterceptor {
     const upload = multer({ storage }).fields([
       { name: 'recipeImg', maxCount: 1 },
       { name: 'recipeFile', maxCount: 1 },
+      { name: 'userImg', maxCount: 1 },
     ]);
 
     await new Promise((resolve, reject) => {
@@ -53,30 +60,44 @@ export class FileInterceptor implements NestInterceptor {
           reject(err);
         }
 
-        if (request.files && request.files.recipeImg) {
-          request.body.recipeImg = path.join(
-            'uploads',
-            'images',
-            request.files.recipeImg[0].filename,
-          );
+        if (request.files) {
+          if (request.files.recipeImg) {
+            request.body.recipeImg = path.join(
+              'uploads',
+              'images',
+              'diets',
+              request.files.recipeImg[0].filename,
+            );
+          }
+
+          if (request.files.recipeFile) {
+            request.body.recipeFile = path.join(
+              'uploads',
+              'files',
+              request.files.recipeFile[0].filename,
+            );
+          }
+
+          if (request.files.userImg) {
+            request.body.userImg = path.join(
+              'uploads',
+              'images',
+              'users',
+              request.files.userImg[0].filename,
+            );
+          }
         }
 
-        if (request.files && request.files.recipeFile) {
-          request.body.recipeFile = path.join(
-            'uploads',
-            'files',
-            request.files.recipeFile[0].filename,
-          );
-        }
         resolve(true);
       });
     });
 
     // 컨트롤러에서는 이미 메뉴를 타입이 있는 상태로 인지해서 파싱할 수가 없음
     // 따라서 임시로 여기서 파싱
-    const menuesParsed = JSON.parse(request.body.menues);
-    request.body.menues = menuesParsed;
-
+    if (request.body.menues) {
+      request.body.menues = JSON.parse(request.body.menues);
+    }
+    console.log(request.body);
     return next.handle();
   }
 }

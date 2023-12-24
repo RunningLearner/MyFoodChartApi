@@ -11,9 +11,16 @@ import { LogdataModule } from './logdata/logdata.module';
 import { PostDietModule } from './post-diet/post-diet.module';
 import { PostFreeModule } from './post-free/post-free.module';
 import { UserModule } from './user/user.module';
+import { ProfileModule } from './profile/profile.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'), // 정적 파일들이 위치한 폴더
+      serveRoot: '/uploads', // URL에서 사용될 경로
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -35,6 +42,7 @@ import { UserModule } from './user/user.module';
     PostFreeModule,
     CommentModule,
     LogdataModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService],

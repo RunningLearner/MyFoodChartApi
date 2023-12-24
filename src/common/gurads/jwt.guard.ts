@@ -23,8 +23,8 @@ export class JwtGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const authHeader = request.headers['cookie'];
-    const token = authHeader && authHeader.split('=')[1];
+    const cookies = request.headers['cookie'];
+    const token = this.extractTokenFromCookies(cookies, 'access_token');
 
     if (!token) {
       throw new UnauthorizedException('토큰이 존재하지 않습니다.');
@@ -46,6 +46,7 @@ export class JwtGuard implements CanActivate {
       if (!request.user) request.user = {};
       request.user.email = user.email;
       request.user.role = user.role;
+      request.user.id = user.id;
 
       return true;
     } catch (e) {
@@ -55,5 +56,20 @@ export class JwtGuard implements CanActivate {
       // 토큰이 유효하지 않음
       throw e;
     }
+  }
+
+  private extractTokenFromCookies(
+    cookies: string,
+    tokenKey: string,
+  ): string | null {
+    if (!cookies) return null;
+
+    const keyValuePairs = cookies.split(';').map((cookie) => cookie.trim());
+
+    const tokenCookie = keyValuePairs.find((cookie) =>
+      cookie.startsWith(`${tokenKey}=`),
+    );
+
+    return tokenCookie ? tokenCookie.split('=')[1] : null;
   }
 }

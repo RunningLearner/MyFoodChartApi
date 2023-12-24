@@ -42,14 +42,14 @@ export class PostDietService {
   }
 
   @CustomLoggerDecorator()
-  async create(createPostDto: CreatePostDietDto) {
+  async create(userEmail: string, createPostDto: CreatePostDietDto) {
     const user = await this.usersRepository.findOne({
-      where: { email: createPostDto.userEmail },
+      where: { email: userEmail },
     });
 
     if (!user) {
       throw new NotFoundException(
-        `이메일이 ${createPostDto.userEmail}인 사용자를 찾을 수 없습니다. `,
+        `이메일이 ${userEmail}인 사용자를 찾을 수 없습니다. `,
       );
     }
 

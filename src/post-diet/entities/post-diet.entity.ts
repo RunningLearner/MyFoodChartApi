@@ -40,10 +40,10 @@ export class PostDiet {
   @Column({ type: 'text' })
   explanation: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   recipeFile: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   whichSchool: string;
 
   @Column({ type: 'boolean', nullable: true })

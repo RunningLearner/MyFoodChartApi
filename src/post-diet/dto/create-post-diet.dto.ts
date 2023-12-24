@@ -1,10 +1,7 @@
-import { IsArray, IsString } from 'class-validator';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 import { CreateMenuDTO } from './create-menu.dto';
 
 export class CreatePostDietDto {
-  @IsString()
-  userEmail: string;
-
   @IsString()
   date: string;
 
@@ -24,9 +21,11 @@ export class CreatePostDietDto {
   explanation: string;
 
   @IsString()
+  @IsOptional()
   recipeFile: string;
 
   @IsString()
+  @IsOptional()
   whichSchool: string;
 
   @IsArray()
