@@ -1,12 +1,15 @@
-import { IsBoolean, IsString } from 'class-validator';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 export class UpdateUserDTO {
   @IsString()
-  name: string;
+  @IsOptional()
+  name?: string;
 
   @IsString()
-  nickname: string;
+  @IsOptional()
+  nickname?: string;
 
   @IsBoolean()
-  isNutritionist: boolean;
+  @IsOptional()
+  isNutritionist?: boolean;
 }
