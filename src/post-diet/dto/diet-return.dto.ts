@@ -1,3 +1,4 @@
+import { CommentDiet } from 'src/comment/entities/comment-diet.entity';
 import { UserReturnDto } from '../../user/dto/user-return.dto';
 
 export class DietReturnAllDto {
@@ -8,6 +9,7 @@ export class DietReturnAllDto {
   recipeImg: string;
   whichSchool: string;
   menues: MenuReturnDto[];
+  comments: CommentDiet[];
   // 사용자의 고유아이디는 불필요
   user: Omit<UserReturnDto, 'id'>;
 
@@ -24,6 +26,7 @@ export class DietReturnAllDto {
       whichSchool: post.whichSchool,
       menues: post.menues.map(MenuReturnDto.fromEntity),
       user: userWithoutId,
+      comments: post.comments,
     };
   }
 }
@@ -40,6 +43,7 @@ export class DietReturnDto {
   recipeImg: string;
   whichSchool: string;
   menues: MenuReturnDto[];
+  comments: CommentDiet[];
   // 사용자의 고유아이디는 불필요
   user: Omit<UserReturnDto, 'id'>;
 
@@ -60,6 +64,7 @@ export class DietReturnDto {
       whichSchool: post.whichSchool,
       menues: post.menues.map(MenuReturnDto.fromEntity),
       user: userWithoutId,
+      comments: post.comments,
     };
   }
 }

@@ -23,12 +23,12 @@ export class CommentFreeService {
     private userRepository: Repository<User>,
   ) {}
 
-  async create(createCommentDto: CreateCommentDto) {
+  async create(createCommentDto: CreateCommentDto, userEmail: string) {
     const newComment = new CommentFree();
     newComment.content = createCommentDto.content;
 
     const foundUser = await this.userRepository.findOne({
-      where: { email: createCommentDto.userEmail },
+      where: { email: userEmail },
     });
 
     newComment.user = foundUser;
@@ -45,7 +45,9 @@ export class CommentFreeService {
   }
 
   async findAll() {
-    const foundComments = await this.commentFreeRepository.find();
+    const foundComments = await this.commentFreeRepository.find({
+      relations: ['user'],
+    });
     return foundComments.map((foundComment) =>
       CommentReturnDto.fromEntity(foundComment),
     );

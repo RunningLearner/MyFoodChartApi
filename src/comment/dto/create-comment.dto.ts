@@ -2,15 +2,15 @@ import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateCommentDto {
   @IsString()
-  @IsNotEmpty()
-  readonly content: string;
+  username: string;
 
   @IsString()
   @IsNotEmpty()
   postId: string;
 
   @IsString()
-  userEmail: string;
+  @IsNotEmpty()
+  readonly content: string;
 
   @IsString()
   type: string;

@@ -75,7 +75,7 @@ export class PostDietService {
   @CustomLoggerDecorator()
   async findAll(): Promise<DietReturnAllDto[]> {
     const result = await this.postsDietRepository.find({
-      relations: ['user', 'menues'],
+      relations: ['user', 'menues', 'comments'],
     });
 
     return result.map((post) => DietReturnAllDto.fromEntity(post));
@@ -85,7 +85,7 @@ export class PostDietService {
   async findOne(id: number): Promise<DietReturnDto> {
     const foundPost = await this.postsDietRepository.findOne({
       where: { id },
-      relations: ['user', 'menues'],
+      relations: ['user', 'menues', 'comments'],
     });
 
     if (!foundPost) {
