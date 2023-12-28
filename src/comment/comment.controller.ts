@@ -35,10 +35,10 @@ export class CommentsController {
     const service = this.getService(type);
 
     // 인증된 유저 메일을 추가
-    createCommentDto.userEmail = req.user.email;
+    const userEmail = req.user.email;
     createCommentDto.type = type;
 
-    return service.create(createCommentDto);
+    return service.create(createCommentDto, userEmail);
   }
 
   @Get(':type')
