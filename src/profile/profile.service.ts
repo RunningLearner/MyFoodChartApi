@@ -36,6 +36,7 @@ export class ProfileService {
     if (type === 'diet') {
       return await this.postDietRepository.find({
         where: { user: { email: userEmail } },
+        relations: ['menues'],
         order: { createdAt: 'DESC' }, // 작성일 내림차순 정렬
       });
     }
