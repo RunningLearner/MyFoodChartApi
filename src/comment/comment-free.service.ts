@@ -6,10 +6,10 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PostFree } from '../post-free/entities/post-free.entity';
-import { User } from '../user/entities/user.entity';
+import { User, UserRole } from '../user/entities/user.entity';
 import { CommentReturnDto } from './dto/comment-return.dto';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDietDto } from './dto/update-comment.dto';
+import { UpdateCommentDto } from './dto/update-comment.dto';
 import { CommentFree } from './entities/comment-free.entity';
 
 @Injectable()
@@ -66,17 +66,17 @@ export class CommentFreeService {
     return CommentReturnDto.fromEntity(foundComment);
   }
 
-  async update(id: number, updateCommentDto: UpdateCommentDietDto) {
+  async update(id: number, updateCommentDto: UpdateCommentDto) {
     const foundComment = await this.commentFreeRepository.findOne({
       where: { id },
       relations: ['user'],
     });
 
     if (!foundComment) {
-      throw new NotFoundException(`Comment with ID ${id} not found.`);
+      throw new NotFoundException(`해당 댓글을 찾을 수 없습니다.`);
     }
 
-    if (foundComment.user.email !== updateCommentDto.userEmail) {
+    if (updateCommentDto.userRole !== UserRole.ADMIN) {
       throw new UnauthorizedException('Unauthorized to edit this comment.');
     }
 

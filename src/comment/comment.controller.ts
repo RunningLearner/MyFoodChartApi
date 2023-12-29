@@ -15,7 +15,7 @@ import { RolesGuard } from '../common/gurads/roles.guard';
 import { CommentDietService } from './comment-diet.service';
 import { CommentFreeService } from './comment-free.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDietDto } from './dto/update-comment.dto';
+import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @Controller('comments')
 export class CommentsController {
@@ -61,12 +61,12 @@ export class CommentsController {
   update(
     @Param('id') id: string,
     @Param('type') type: string,
-    @Body() updateCommentDto: UpdateCommentDietDto,
+    @Body() updateCommentDto: UpdateCommentDto,
     @Req() req,
   ) {
     const service = this.getService(type);
     // 인증된 유저 메일을 추가
-    updateCommentDto.userEmail = req.user.email;
+    updateCommentDto.userRole = req.user.role;
 
     return service.update(+id, updateCommentDto);
   }
