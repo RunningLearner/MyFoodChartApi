@@ -47,6 +47,7 @@ export class ProfileService {
     });
     const postsDiet = await this.postDietRepository.find({
       where: { user: { email: userEmail } },
+      relations: ['menues'],
     });
 
     // 모든 게시글을 하나의 배열로 결합하고, 작성일에 따라 정렬
