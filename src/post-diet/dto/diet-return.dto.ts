@@ -9,7 +9,6 @@ export class DietReturnAllDto {
   recipeImg: string;
   whichSchool: string;
   menues: MenuReturnDto[];
-  comments: CommentDiet[];
   // 사용자의 고유아이디는 불필요
   user: Omit<UserReturnDto, 'id'>;
 
@@ -26,7 +25,6 @@ export class DietReturnAllDto {
       whichSchool: post.whichSchool,
       menues: post.menues.map(MenuReturnDto.fromEntity),
       user: userWithoutId,
-      comments: post.comments,
     };
   }
 }
