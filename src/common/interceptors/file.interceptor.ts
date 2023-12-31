@@ -97,7 +97,6 @@ export class FileInterceptor implements NestInterceptor {
     if (request.body.menues) {
       request.body.menues = JSON.parse(request.body.menues);
     }
-    console.log(request.body);
     return next.handle();
   }
 }

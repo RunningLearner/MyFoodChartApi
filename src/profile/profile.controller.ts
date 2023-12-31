@@ -12,7 +12,7 @@ import { ProfileService } from './profile.service';
 import { JwtGuard } from '../common/gurads/jwt.guard';
 import { UserService } from '../user/user.service';
 import { UpdateUserPhotoDTO } from '../user/dto/update-user-photo.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '../common/interceptors/file.interceptor';
 
 @Controller('profile')
 export class ProfileController {

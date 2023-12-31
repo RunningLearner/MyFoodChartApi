@@ -64,7 +64,7 @@ export class UserService {
       throw new InternalServerErrorException('사진 업데이트에 실패했습니다.');
     }
 
-    return updateResult;
+    return updateUserPhotoDto;
   }
 
   private async isNicknameUnique(
