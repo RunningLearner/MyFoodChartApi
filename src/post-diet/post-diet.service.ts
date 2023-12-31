@@ -114,7 +114,11 @@ export class PostDietService {
     }
 
     // 객체를 덮어씌우기
-    Object.assign(foundPost, data);
+    Object.keys(data).forEach((key) => {
+      if (data[key] !== 'null' && data[key] !== '') {
+        foundPost[key] = data[key];
+      }
+    });
 
     const savedPost = await this.postsDietRepository.save(foundPost);
 
