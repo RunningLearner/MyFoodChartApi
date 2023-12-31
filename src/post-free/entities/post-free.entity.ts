@@ -7,8 +7,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { CommentFree } from '../../comment/entities/comment-free.entity';
 import { User } from '../../user/entities/user.entity';
+import { Comment } from '../../comment/entities/comment.entity';
 
 @Entity()
 export class PostFree {
@@ -27,8 +27,8 @@ export class PostFree {
   @Column({ type: 'boolean', nullable: true })
   isDeleted: boolean;
 
-  @OneToMany(() => CommentFree, (comment) => comment.post)
-  comments: CommentFree[];
+  @OneToMany(() => Comment, (comment) => comment.postFree)
+  comments: Comment[];
 
   @ManyToOne(() => User, (user) => user.postsFree) // boards는 User 엔터티에서 Board 엔터티를 참조하는 필드입니다.
   user: User;

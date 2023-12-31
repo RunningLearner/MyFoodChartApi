@@ -6,11 +6,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PostFree } from '../../post-free/entities/post-free.entity';
+import { PostDiet } from '../../post-diet/entities/post-diet.entity';
 import { User } from '../../user/entities/user.entity';
+import { PostFree } from '../../post-free/entities/post-free.entity';
 
 @Entity()
-export class CommentFree {
+export class Comment {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -23,8 +24,14 @@ export class CommentFree {
   @Column({ type: 'text' })
   content: string;
 
+  @Column({ type: 'text' })
+  type: string;
+
+  @ManyToOne(() => PostDiet, (post) => post.comments)
+  postDiet: PostDiet;
+
   @ManyToOne(() => PostFree, (post) => post.comments)
-  post: PostFree;
+  postFree: PostFree;
 
   @ManyToOne(() => User, (user) => user.postsDiet)
   user: User;
