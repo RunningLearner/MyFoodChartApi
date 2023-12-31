@@ -12,17 +12,13 @@ import {
 import { Roles } from '../common/decorators/roles.decorator';
 import { JwtGuard } from '../common/gurads/jwt.guard';
 import { RolesGuard } from '../common/gurads/roles.guard';
-import { CommentDietService } from './comment-diet.service';
-import { CommentFreeService } from './comment-free.service';
+import { CommentDietService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @Controller('comments')
 export class CommentsController {
-  constructor(
-    private readonly commentDietService: CommentDietService,
-    private readonly commentFreeService: CommentFreeService,
-  ) {}
+  constructor(private readonly commentDietService: CommentDietService) {}
 
   @Post(':type')
   @UseGuards(JwtGuard, RolesGuard)
@@ -32,27 +28,21 @@ export class CommentsController {
     @Body() createCommentDto: CreateCommentDto,
     @Req() req,
   ) {
-    const service = this.getService(type);
-
     // 인증된 유저 메일을 추가
     const userEmail = req.user.email;
     createCommentDto.type = type;
 
-    return service.create(createCommentDto, userEmail);
+    return this.commentDietService.create(createCommentDto, userEmail);
   }
 
   @Get(':type')
   findAll(@Param('type') type: string) {
-    const service = this.getService(type);
-
-    return service.findAll();
+    return this.commentDietService.findAll(type);
   }
 
   @Get(':type/:id')
   findOne(@Param('type') type: string, @Param('id') id: string) {
-    const service = this.getService(type);
-
-    return service.findOne(+id);
+    return this.commentDietService.findOne(type, +id);
   }
 
   @Patch(':type/:id')
@@ -64,23 +54,16 @@ export class CommentsController {
     @Body() updateCommentDto: UpdateCommentDto,
     @Req() req,
   ) {
-    const service = this.getService(type);
     // 인증된 유저 메일을 추가
     updateCommentDto.userRole = req.user.role;
 
-    return service.update(+id, updateCommentDto);
+    return this.commentDietService.update(type, +id, updateCommentDto);
   }
 
   @Delete(':type/:id')
   @UseGuards(JwtGuard)
   @Roles('admin')
   remove(@Param('type') type: string, @Param('id') id: string) {
-    const service = this.getService(type);
-
-    return service.remove(+id);
-  }
-
-  private getService(type: string) {
-    return type === 'diet' ? this.commentDietService : this.commentFreeService;
+    return this.commentDietService.remove(type, +id);
   }
 }

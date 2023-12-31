@@ -1,6 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { CommentDiet } from '../../comment/entities/comment-diet.entity';
-import { CommentFree } from '../../comment/entities/comment-free.entity';
+import { Comment } from '../../comment/entities/comment.entity';
 import { PostDiet } from '../../post-diet/entities/post-diet.entity';
 import { PostFree } from '../../post-free/entities/post-free.entity';
 
@@ -33,14 +32,11 @@ export class User {
   @OneToMany(() => PostDiet, (post) => post.user)
   postsDiet: PostDiet[];
 
-  @OneToMany(() => CommentDiet, (comment) => comment.user)
-  commentsDiet: CommentDiet[];
+  @OneToMany(() => Comment, (comment) => comment.user)
+  commentsDiet: Comment[];
 
   @OneToMany(() => PostDiet, (post) => post.user)
   postsFree: PostFree[];
-
-  @OneToMany(() => CommentDiet, (comment) => comment.user)
-  commentsFree: CommentFree[];
 
   @Column({
     type: 'enum',

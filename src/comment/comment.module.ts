@@ -1,25 +1,15 @@
 import { Module } from '@nestjs/common';
-import { CommentDietService } from './comment-diet.service';
+import { CommentDietService } from './comment.service';
 import { CommentsController } from './comment.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostDiet } from '../post-diet/entities/post-diet.entity';
 import { PostFree } from '../post-free/entities/post-free.entity';
 import { User } from '../user/entities/user.entity';
-import { CommentDiet } from './entities/comment-diet.entity';
-import { CommentFree } from './entities/comment-free.entity';
-import { CommentFreeService } from './comment-free.service';
+import { Comment } from './entities/comment.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      PostDiet,
-      User,
-      CommentDiet,
-      CommentFree,
-      PostFree,
-    ]),
-  ],
+  imports: [TypeOrmModule.forFeature([PostDiet, User, Comment, PostFree])],
   controllers: [CommentsController],
-  providers: [CommentDietService, CommentFreeService],
+  providers: [CommentDietService],
 })
 export class CommentModule {}

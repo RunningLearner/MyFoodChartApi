@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { CommentDiet } from '../../comment/entities/comment-diet.entity';
+import { Comment } from '../../comment/entities/comment.entity';
 import { User } from '../../user/entities/user.entity';
 import { Menu } from './menu.entity';
 
@@ -49,8 +49,8 @@ export class PostDiet {
   @Column({ type: 'boolean', nullable: true })
   isDeleted: boolean;
 
-  @OneToMany(() => CommentDiet, (comment) => comment.post)
-  comments: CommentDiet[];
+  @OneToMany(() => Comment, (comment) => comment.postDiet)
+  comments: Comment[];
 
   @OneToMany(() => Menu, (menu) => menu.post, { cascade: true })
   menues: Menu[];

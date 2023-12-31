@@ -10,22 +10,26 @@ import { User, UserRole } from '../user/entities/user.entity';
 import { CommentReturnDto } from './dto/comment-return.dto';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
-import { CommentDiet } from './entities/comment-diet.entity';
+import { Comment } from './entities/comment.entity';
+import { PostFree } from '../post-free/entities/post-free.entity';
 
 @Injectable()
 export class CommentDietService {
   constructor(
-    @InjectRepository(CommentDiet)
-    private commentDietRepository: Repository<CommentDiet>,
+    @InjectRepository(Comment)
+    private commentDietRepository: Repository<Comment>,
     @InjectRepository(PostDiet)
     private postDietRepository: Repository<PostDiet>,
+    @InjectRepository(PostDiet)
+    private postFreeRepository: Repository<PostFree>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
 
   async create(createCommentDto: CreateCommentDto, userEmail: string) {
-    const newComment = new CommentDiet();
+    const newComment = new Comment();
     newComment.content = createCommentDto.content;
+    newComment.type = createCommentDto.type;
 
     const foundUser = await this.userRepository.findOne({
       where: { email: userEmail },
@@ -33,27 +37,37 @@ export class CommentDietService {
 
     newComment.user = foundUser;
 
-    const foundPost = await this.postDietRepository.findOne({
-      where: { id: +createCommentDto.postId },
-    });
+    let foundPost;
 
-    newComment.post = foundPost;
+    if (createCommentDto.type === 'diet') {
+      foundPost = await this.postDietRepository.findOne({
+        where: { id: +createCommentDto.postId },
+      });
+      newComment.postDiet = foundPost;
+    } else {
+      foundPost = await this.postFreeRepository.findOne({
+        where: { id: +createCommentDto.postId },
+      });
+      newComment.postFree = foundPost;
+    }
 
     await this.commentDietRepository.save(newComment);
 
     return newComment;
   }
 
-  async findAll() {
-    const foundComments = await this.commentDietRepository.find();
+  async findAll(type: string) {
+    const foundComments = await this.commentDietRepository.find({
+      where: { type },
+    });
     return foundComments.map((foundComment) =>
       CommentReturnDto.fromEntity(foundComment),
     );
   }
 
-  async findOne(id: number) {
+  async findOne(type: string, id: number) {
     const foundComment = await this.commentDietRepository.findOne({
-      where: { id },
+      where: { type, id },
       relations: ['user'],
     });
 
@@ -64,9 +78,9 @@ export class CommentDietService {
     return CommentReturnDto.fromEntity(foundComment);
   }
 
-  async update(id: number, updateCommentDto: UpdateCommentDto) {
+  async update(type: string, id: number, updateCommentDto: UpdateCommentDto) {
     const foundComment = await this.commentDietRepository.findOne({
-      where: { id },
+      where: { type, id },
       relations: ['user'],
     });
 
@@ -85,9 +99,9 @@ export class CommentDietService {
     return foundComment;
   }
 
-  async remove(id: number) {
+  async remove(type: string, id: number) {
     const foundComment = await this.commentDietRepository.findOne({
-      where: { id },
+      where: { type, id },
     });
 
     if (!foundComment) {

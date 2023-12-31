@@ -1,4 +1,4 @@
-import { CommentDiet } from 'src/comment/entities/comment-diet.entity';
+import { Comment } from 'src/comment/entities/comment.entity';
 import { UserReturnDto } from '../../user/dto/user-return.dto';
 
 export class DietReturnAllDto {
@@ -41,7 +41,7 @@ export class DietReturnDto {
   recipeImg: string;
   whichSchool: string;
   menues: MenuReturnDto[];
-  comments: CommentDiet[];
+  comments: Comment[];
   // 사용자의 고유아이디는 불필요
   user: Omit<UserReturnDto, 'id'>;
 
