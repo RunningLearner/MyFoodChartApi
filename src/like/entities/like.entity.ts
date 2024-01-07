@@ -1,16 +1,15 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { User } from '../../user/entities/user.entity';
+import { PostDiet } from '../../post-diet/entities/post-diet.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
 @Entity()
 export class Like {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'number' })
   userId: number;
 
-  @Column()
-  targetId: number;
-
-  @Column()
-  targetType: string; // 'DietPost', 'DietComment', 'FreePost', 'FreeComment', 'Announcement' 등
+  @ManyToOne(() => PostDiet, (post) => post.comments)
+  postDiet: PostDiet;
 }

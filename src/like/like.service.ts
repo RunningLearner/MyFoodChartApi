@@ -1,31 +1,27 @@
 import { Injectable } from '@nestjs/common';
-import { CreateLikeDto } from './dto/create-like.dto';
 import { UpdateLikeDto } from './dto/update-like.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Like } from './entities/like.entity';
+import { UserService } from '../user/user.service';
+import { PostDietService } from 'src/post-diet/post-diet.service';
 
 @Injectable()
 export class LikeService {
   constructor(
     @InjectRepository(Like)
     private likesRepository: Repository<Like>,
+    private readonly userService: UserService,
+    private readonly postDietService: PostDietService,
   ) {}
 
-  async addLike(
-    userId: number,
-    targetId: number,
-    targetType: string,
-  ): Promise<Like> {
-    const like = this.likesRepository.create({ userId, targetId, targetType });
-    return this.likesRepository.save(like);
-  }
+  async findLikes(targetId) {
+    // 좋아요가 눌려진 게시글 정보
+    const post = await this.postDietService.findOne(targetId);
 
-  async findLikes(targetId, targetType) {
     const likes = await this.likesRepository.find({
       where: {
-        targetId: targetId,
-        targetType: targetType,
+        postDiet: post,
       },
     });
 
@@ -33,11 +29,15 @@ export class LikeService {
   }
 
   async update(updateLikeDto: UpdateLikeDto) {
+    // 좋아요를 누른 사용자 정보
+    const user = await this.userService.findOne(updateLikeDto.userId);
+    // 좋아요가 눌려진 게시글 정보
+    const post = await this.postDietService.findOne(updateLikeDto.targetId);
+
     const like = await this.likesRepository.findOne({
       where: {
-        userId: updateLikeDto.userId,
-        targetId: updateLikeDto.targetId,
-        targetType: updateLikeDto.targetType,
+        userId: +user.id,
+        postDiet: post,
       },
     });
 

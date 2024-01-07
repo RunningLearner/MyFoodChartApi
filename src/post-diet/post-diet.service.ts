@@ -82,7 +82,7 @@ export class PostDietService {
   }
 
   @CustomLoggerDecorator()
-  async findOne(id: number): Promise<DietReturnDto> {
+  async findOne(id: number) {
     const foundPost = await this.postsDietRepository.findOne({
       where: { id },
       relations: ['user', 'menues', 'comments', 'comments.user'],
@@ -92,7 +92,7 @@ export class PostDietService {
       throw new NotFoundException(`Post with id ${id} not found`);
     }
 
-    return DietReturnDto.fromEntity(foundPost);
+    return foundPost;
   }
 
   @CustomLoggerDecorator()
