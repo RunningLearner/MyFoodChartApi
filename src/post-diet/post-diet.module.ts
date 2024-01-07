@@ -6,10 +6,11 @@ import { Menu } from './entities/menu.entity';
 import { PostDiet } from './entities/post-diet.entity';
 import { User } from '../user/entities/user.entity';
 import { Comment } from '../comment/entities/comment.entity';
+import { LikeService } from 'src/like/like.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PostDiet, Menu, User, Comment])],
   controllers: [PostsController],
-  providers: [PostDietService],
+  providers: [PostDietService, LikeService],
 })
 export class PostDietModule {}
