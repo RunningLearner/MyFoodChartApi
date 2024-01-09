@@ -1,15 +1,15 @@
-import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class UpdateLikeDto {
-  @IsInt()
+  @IsString()
   @IsOptional()
-  userId: number;
-
-  @IsInt()
-  @IsNotEmpty()
-  targetId: number;
+  userId: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
+  targetId: string;
+
+  @IsString()
+  @IsOptional()
   targetType: string; // 'DietPost', 'DietComment', 'FreePost', 'FreeComment', 'Announcement' 등
 }

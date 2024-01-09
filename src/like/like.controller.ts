@@ -10,8 +10,7 @@ export class LikeController {
   @UseGuards(JwtGuard)
   @Patch()
   updateLike(@Body() updateLikeDto: UpdateLikeDto, @Request() req) {
-    updateLikeDto.userId = +req.user.userId;
-
+    updateLikeDto.userId = req.user.id;
     return this.likeService.update(updateLikeDto);
   }
 }

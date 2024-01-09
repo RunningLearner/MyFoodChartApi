@@ -7,8 +7,8 @@ export class Like {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'number' })
-  userId: number;
+  @Column({ type: 'text' })
+  userId: string;
 
   @ManyToOne(() => PostDiet, (post) => post.comments)
   postDiet: PostDiet;
