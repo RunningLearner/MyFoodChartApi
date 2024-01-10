@@ -21,7 +21,7 @@ export class LikeService {
 
     const likes = await this.likesRepository.find({
       where: {
-        postDiet: post,
+        postDiet: { id: post.id },
       },
     });
 

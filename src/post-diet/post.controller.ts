@@ -56,8 +56,16 @@ export class PostsController {
 
   @Get('diet')
   @CustomLoggerDecorator()
-  findAll() {
-    return this.postDietService.findAll();
+  async findAll() {
+    const postList = await this.postDietService.findAll();
+    const postsWithLikes = await Promise.all(
+      postList.map(async (post) => {
+        const likesCount = await this.likeService.findLikes(post.id);
+        return { ...post, likes: likesCount };
+      }),
+    );
+
+    return postsWithLikes;
   }
 
   @Get('diet/:id')
