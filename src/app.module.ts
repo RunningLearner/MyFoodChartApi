@@ -14,6 +14,7 @@ import { UserModule } from './user/user.module';
 import { ProfileModule } from './profile/profile.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { LikeModule } from './like/like.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { join } from 'path';
     CommentModule,
     LogdataModule,
     ProfileModule,
+    LikeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

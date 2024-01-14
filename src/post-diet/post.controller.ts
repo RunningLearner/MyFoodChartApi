@@ -22,12 +22,15 @@ import { FileInterceptor } from '../common/interceptors/file.interceptor';
 import { CreatePostDietDto } from './dto/create-post-diet.dto';
 import { UpdatePostDietDto } from './dto/update-post-diet.dto';
 import { PostDietService } from './post-diet.service';
+import { DietReturnDto } from './dto/diet-return.dto';
+import { LikeService } from '../like/like.service';
 
 @Controller('posts')
 export class PostsController {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: WinstonLogger,
     private readonly postDietService: PostDietService,
+    private readonly likeService: LikeService,
   ) {}
 
   @UseGuards(JwtGuard, RolesGuard)
@@ -53,14 +56,24 @@ export class PostsController {
 
   @Get('diet')
   @CustomLoggerDecorator()
-  findAll() {
-    return this.postDietService.findAll();
+  async findAll() {
+    const postList = await this.postDietService.findAll();
+    const postsWithLikes = await Promise.all(
+      postList.map(async (post) => {
+        const likesCount = await this.likeService.findLikes(post.id);
+        return { ...post, likes: likesCount };
+      }),
+    );
+
+    return postsWithLikes;
   }
 
   @Get('diet/:id')
   @CustomLoggerDecorator()
-  findOne(@Param('id') id: string) {
-    return this.postDietService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const post = await this.postDietService.findOne(+id);
+    const likes = await this.likeService.findLikes(+id);
+    return DietReturnDto.fromEntity(post, likes);
   }
 
   @UseGuards(JwtGuard, RolesGuard)

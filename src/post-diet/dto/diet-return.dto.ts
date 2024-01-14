@@ -40,12 +40,13 @@ export class DietReturnDto {
   recipeFile: string;
   recipeImg: string;
   whichSchool: string;
+  likes: number;
   menues: MenuReturnDto[];
   comments: Comment[];
   // 사용자의 고유아이디는 불필요
   user: Omit<UserReturnDto, 'id'>;
 
-  static fromEntity(post: any): DietReturnDto {
+  static fromEntity(post: any, likes: number): DietReturnDto {
     const userDto = UserReturnDto.fromEntity(post.user);
     const { id, ...userWithoutId } = userDto;
 
@@ -60,6 +61,7 @@ export class DietReturnDto {
       recipeFile: post.recipeFile,
       recipeImg: post.recipeImg,
       whichSchool: post.whichSchool,
+      likes,
       menues: post.menues.map(MenuReturnDto.fromEntity),
       user: userWithoutId,
       comments: post.comments,
